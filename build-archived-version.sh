@@ -63,15 +63,11 @@ if [ -f "static/deprecated-llama-stack-spec.yaml" ]; then
   npm run gen-api-docs deprecated 2>&1 | grep -E "^Successfully" || true
 fi
 
-# Step 4: Patch docs source (sidebar validation, blog warnings, MDX compat)
-echo "--- Patching docs source ---"
-"$REPO_DIR/patch-docs-source.sh"
-
-# Step 5: Inline raw-loader imports
+# Step 4: Inline raw-loader imports
 echo "--- Inlining raw-loader imports ---"
 python3 "$REPO_DIR/inline-raw-loader.py" docs "$TEMP_DIR/llama-stack"
 
-# Step 6: Patch config for standalone archived build
+# Step 5: Patch config for standalone archived build
 echo "--- Patching config for baseUrl: /$VERSION/ ---"
 export VERSION
 node << 'CONFIGEOF'
@@ -106,7 +102,7 @@ fs.writeFileSync('docusaurus.config.ts', config);
 console.log('Config patched');
 CONFIGEOF
 
-# Step 7: Build
+# Step 6: Build
 echo "--- Building ---"
 NODE_OPTIONS="--max-old-space-size=8192" npm run build 2>&1 | tail -50
 

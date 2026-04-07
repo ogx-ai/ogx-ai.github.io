@@ -17,6 +17,11 @@ on:
           - build-only
           - deploy-only
           - build-and-deploy
+      llama_stack_branch:
+        description: 'Branch of llama-stack to build from (default: main)'
+        required: false
+        default: 'main'
+        type: string
 
 permissions:
   contents: write
@@ -40,15 +45,17 @@ jobs:
         TEMP_DIR=$(mktemp -d)
         echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
 
-        git clone https://github.com/llamastack/llama-stack.git "$TEMP_DIR/llama-stack"
+        git clone https://github.com/${{ github.repository_owner }}/llama-stack.git "$TEMP_DIR/llama-stack"
         cd "$TEMP_DIR/llama-stack"
         git fetch --all --tags
 
         # Determine version to checkout
         VERSION="${{ github.event.inputs.version }}"
         if [ "$VERSION" = "latest" ] || [ -z "$VERSION" ]; then
-          git checkout main
-          echo "✅ Using main branch (latest)"
+          LSBRANCH="${{ github.event.inputs.llama_stack_branch }}"
+          LSBRANCH="${LSBRANCH:-main}"
+          git checkout "$LSBRANCH"
+          echo "✅ Using branch: $LSBRANCH"
           echo "BUILDING_LATEST=true" >> $GITHUB_ENV
           echo "VERSION_TAG=latest" >> $GITHUB_ENV
         else
@@ -89,216 +96,60 @@ jobs:
         # Copy persistent versionsArchived.json from repo
         cp "${{ github.workspace }}/versionsArchived.json" ./
 
-        # Load existing versions.json from deployed site or create empty
-        if [ -f "${{ github.workspace }}/docs/versions.json" ]; then
-          # If we're building a specific version, exclude it from the imported versions.json
-          if [ "${{ env.BUILDING_LATEST }}" != "true" ]; then
-            # Filter out the version we're about to build
-            node -e "
-            const versions = JSON.parse(require('fs').readFileSync('${{ github.workspace }}/docs/versions.json', 'utf8'));
-            const filtered = versions.filter(v => v !== '${{ env.VERSION_TAG }}');
-            require('fs').writeFileSync('versions.json', JSON.stringify(filtered, null, 2));
-            console.log('✅ Loaded versions.json (filtered out ${{ env.VERSION_TAG }})');
-            "
-          else
-            cp "${{ github.workspace }}/docs/versions.json" ./
-            echo "✅ Loaded existing versions.json"
-          fi
-        else
-          echo "[]" > versions.json
-          echo "✅ Created empty versions.json"
-        fi
+        # Archived versions are served as standalone static HTML under docs/vX.Y.Z/
+        # Docusaurus versioning is not used - always write empty versions.json
+        echo "[]" > versions.json
+        echo "✅ Created empty versions.json (archived versions are static HTML, not Docusaurus versions)"
 
-        # Patch Docusaurus config for versioning
-        node << 'EOF'
-        const fs = require('fs');
+        # Fix GitHub org to match this repo's owner
+        sed -i "s|https://github.com/llamastack/llama-stack|https://github.com/${{ github.repository_owner }}/llama-stack|g" docusaurus.config.ts
 
-        let config = fs.readFileSync('docusaurus.config.ts', 'utf8');
-
-        // Add versioning imports after OpenAPI import
-        const versioningImports = `
-        // Import fs for versioning configuration
-        const fs = require('fs');
-
-        // Versioning configuration for llamastack.github.io
-        const versionsArchived = (() => {
-          try {
-            return JSON.parse(fs.readFileSync('./versionsArchived.json', 'utf8'));
-          } catch (e) {
-            console.warn('Could not load versionsArchived.json:', e);
-            return {};
+        # Restrict blog to top-level .md/.mdx files only (exclude subdirectory files)
+        # Docusaurus defaults to '**/*.{md,mdx}' which picks up non-blog .md files from subfolders
+        node -e "
+          const fs = require('fs');
+          let c = fs.readFileSync('docusaurus.config.ts', 'utf8');
+          if (!c.match(/blog[\s\S]*?include:/)) {
+            c = c.replace(/(blog:\s*\{)/, \"\\\$1\\n        include: ['*.{md,mdx}'],\");
+            fs.writeFileSync('docusaurus.config.ts', c);
+            console.log('✅ Blog include pattern set to top-level only');
+          } else {
+            console.log('ℹ️ Blog already has explicit include pattern');
           }
-        })();
+        "
+        echo "✅ Configuration patched"
 
-        const archivedVersionsDropdownItems = Object.entries(versionsArchived).map(
-          ([versionName, versionUrl]) => ({
-            label: versionName,
-            href: versionUrl,
-          })
-        );
-        `;
 
-        config = config.replace(
-          /import type \* as OpenApiPlugin from "docusaurus-plugin-openapi-docs";/,
-          `import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
 
-        ${versioningImports}`
-        );
 
-        // Add version dropdown to navbar (replace GitHub item)
-        const versionDropdown = `        {
-          href: 'https://github.com/llamastack/llama-stack',
-          label: 'GitHub',
-          position: 'right',
-        },
-        {
-          type: 'docsVersionDropdown',
-          position: 'right',
-          dropdownItemsAfter: archivedVersionsDropdownItems.length > 0 ? [
-            {
-              type: 'html',
-              value: '<hr class="dropdown-separator">',
-            },
-            {
-              type: 'html',
-              className: 'dropdown-archived-versions',
-              value: '<b>Previous versions</b>',
-            },
-            ...archivedVersionsDropdownItems,
-          ] : [],
-        },`;
 
-        config = config.replace(
-          /\s*{\s*href:\s*'https:\/\/github\.com\/llamastack\/llama-stack',\s*label:\s*'GitHub',\s*position:\s*'right',\s*},/,
-          versionDropdown
-        );
 
-        fs.writeFileSync('docusaurus.config.ts', config);
-        console.log('✅ Configuration patched');
-        EOF
-
-        echo "✅ Configuration patches applied"
-
-    - name: Patch docs source
-      run: |
-        cd "${{ env.TEMP_DIR }}/llama-stack/docs"
-        echo "🔧 Patching docs source (sidebar validation, blog warnings, MDX compat)..."
-        "${{ github.workspace }}/patch-docs-source.sh"
-        echo "✅ Docs source patched"
-
-    - name: Import existing versioning artifacts
-      if: env.BUILDING_LATEST != 'true'
-      run: |
-        echo "📥 Importing existing versioning artifacts from repository..."
-        cd "${{ env.TEMP_DIR }}/llama-stack/docs"
-
-        # Only import versioned_docs/versioned_sidebars for tagged version builds.
-        # For latest builds, archived versions are served as standalone static sites
-        # and linked via versionsArchived.json — Docusaurus doesn't need to build them.
-
-        # Copy existing versioned_docs if they exist
-        if [ -d "${{ github.workspace }}/versioned_docs" ]; then
-          cp -r "${{ github.workspace }}/versioned_docs" ./
-          echo "✅ Imported existing versioned_docs"
-        else
-          echo "ℹ️ No existing versioned_docs found (first version)"
-        fi
-
-        # Copy existing versioned_sidebars if they exist
-        if [ -d "${{ github.workspace }}/versioned_sidebars" ]; then
-          cp -r "${{ github.workspace }}/versioned_sidebars" ./
-          echo "✅ Imported existing versioned_sidebars"
-        else
-          echo "ℹ️ No existing versioned_sidebars found (first version)"
-        fi
-
-        # Copy existing versions.json if it exists (overrides what we loaded earlier)
-        if [ -f "${{ github.workspace }}/versions.json" ]; then
-          cp "${{ github.workspace }}/versions.json" ./
-          echo "✅ Imported existing versions.json"
-        else
-          echo "ℹ️ No existing versions.json found (first version)"
-        fi
-
-        echo "✅ Versioning artifacts import completed"
-
-    - name: Check for content changes (optimization)
-      id: content-changes
-      run: |
-        cd "${{ env.TEMP_DIR }}/llama-stack/docs"
-
-        # Create hash of all documentation content
-        CONTENT_HASH=$(find docs static -type f \( -name "*.md" -o -name "*.mdx" -o -name "*.yaml" -o -name "*.json" \) -exec md5sum {} \; | sort | md5sum | cut -d' ' -f1)
-        echo "CONTENT_HASH=$CONTENT_HASH" >> $GITHUB_OUTPUT
-        echo "📊 Content hash: $CONTENT_HASH"
-
-        # For latest builds, check if content has changed since last deployment
-        if [ "${{ env.BUILDING_LATEST }}" = "true" ]; then
-          # Try to get the last deployment hash from the deployed site
-          LAST_HASH=""
-          if curl -s "https://llamastack.github.io/content-hash.txt" > /tmp/last_hash.txt 2>/dev/null; then
-            LAST_HASH=$(cat /tmp/last_hash.txt)
-            echo "📊 Previous hash: $LAST_HASH"
-          fi
-
-          if [ "$CONTENT_HASH" = "$LAST_HASH" ] && [ -n "$LAST_HASH" ]; then
-            echo "✅ Content unchanged since last deployment"
-            echo "CONTENT_CHANGED=false" >> $GITHUB_OUTPUT
-          else
-            echo "🔄 Content has changed since last deployment"
-            echo "CONTENT_CHANGED=true" >> $GITHUB_OUTPUT
-          fi
-        else
-          # For version builds, always process (new version)
-          echo "🔄 Building version ${{ env.VERSION_TAG }}"
-          echo "CONTENT_CHANGED=true" >> $GITHUB_OUTPUT
-        fi
 
     - name: Cache stable API docs
       uses: actions/cache@v4
       id: cache-api-stable
       with:
         path: ${{ env.TEMP_DIR }}/llama-stack/docs/docs/api
-        key: api-stable-${{ env.VERSION_TAG }}-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/static/llama-stack-spec.yaml') }}
-        restore-keys: |
-          api-stable-${{ env.VERSION_TAG }}-
-          api-stable-
+        key: api-stable-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/static/llama-stack-spec.yaml') }}
+        restore-keys: api-stable-
 
     - name: Cache experimental API docs
       uses: actions/cache@v4
       id: cache-api-experimental
       with:
         path: ${{ env.TEMP_DIR }}/llama-stack/docs/docs/api-experimental
-        key: api-experimental-${{ env.VERSION_TAG }}-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/static/experimental-llama-stack-spec.yaml') }}
-        restore-keys: |
-          api-experimental-${{ env.VERSION_TAG }}-
-          api-experimental-
+        key: api-experimental-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/static/experimental-llama-stack-spec.yaml') }}
+        restore-keys: api-experimental-
 
     - name: Cache deprecated API docs
       uses: actions/cache@v4
       id: cache-api-deprecated
       with:
         path: ${{ env.TEMP_DIR }}/llama-stack/docs/docs/api-deprecated
-        key: api-deprecated-${{ env.VERSION_TAG }}-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/static/deprecated-llama-stack-spec.yaml') }}
-        restore-keys: |
-          api-deprecated-${{ env.VERSION_TAG }}-
-          api-deprecated-
-
-    - name: Cache Docusaurus build artifacts
-      uses: actions/cache@v4
-      id: cache-docusaurus-build
-      with:
-        path: |
-          ${{ env.TEMP_DIR }}/llama-stack/docs/.docusaurus
-          ${{ env.TEMP_DIR }}/llama-stack/docs/build
-        key: docusaurus-build-${{ env.VERSION_TAG }}-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/docs/**/*.{md,mdx}', '${{ env.TEMP_DIR }}/llama-stack/docs/static/**/*', '${{ env.TEMP_DIR }}/llama-stack/docs/docusaurus.config.ts', '${{ env.TEMP_DIR }}/llama-stack/docs/package.json') }}
-        restore-keys: |
-          docusaurus-build-${{ env.VERSION_TAG }}-
-          docusaurus-build-
+        key: api-deprecated-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/static/deprecated-llama-stack-spec.yaml') }}
+        restore-keys: api-deprecated-
 
     - name: Build documentation
-      # Skip if content hasn't changed (latest builds only)
-      if: ${{ steps.content-changes.outputs.CONTENT_CHANGED == 'true' }}
       run: |
         cd "${{ env.TEMP_DIR }}/llama-stack/docs"
 
@@ -368,7 +219,7 @@ jobs:
           mkdir -p versioned_docs/resources
           if [ ! -f "versioned_docs/resources/prompt-format.png" ]; then
             echo "📥 Downloading missing prompt-format.png..."
-            curl -o versioned_docs/resources/prompt-format.png https://raw.githubusercontent.com/llamastack/llama-stack/main/docs/static/img/prompt-format.png
+            curl -o versioned_docs/resources/prompt-format.png https://raw.githubusercontent.com/${{ github.repository_owner }}/llama-stack/main/docs/static/img/prompt-format.png
             echo "✅ Downloaded prompt-format.png to versioned_docs/resources/"
           else
             echo "✅ prompt-format.png already exists in versioned_docs/resources/"
@@ -399,35 +250,15 @@ jobs:
         fi
 
     - name: Build Docusaurus site
-      # Skip if content hasn't changed (latest builds only)
-      if: ${{ steps.content-changes.outputs.CONTENT_CHANGED == 'true' }}
       run: |
         cd "${{ env.TEMP_DIR }}/llama-stack/docs"
 
-        # Check if we can skip build due to cache hit
-        if [ "${{ steps.cache-docusaurus-build.outputs.cache-hit }}" = 'true' ]; then
-          echo "⚡ Using cached Docusaurus build (cache hit)"
+        # Patch out duplicate version badges from OpenAPI MDX files
+        echo "🔧 Patching out duplicate version badges..."
+        find . -name "llama-stack-specification.info.mdx" -type f -exec sed -i '/<span$/,/<\/span>$/d' {} \;
 
-          # Verify build output exists and is valid
-          if [ -f "build/index.html" ] && [ -d "build/assets" ]; then
-            echo "✅ Cached build is valid, skipping build step"
-          else
-            echo "⚠️ Cache hit but build output missing/invalid, rebuilding..."
-            FORCE_BUILD=true
-          fi
-        else
-          echo "🔄 Building Docusaurus site (cache miss)..."
-          FORCE_BUILD=true
-        fi
-
-        if [ "${FORCE_BUILD:-false}" = 'true' ]; then
-          # Patch out duplicate version badges from OpenAPI MDX files
-          echo "🔧 Patching out duplicate version badges..."
-          find . -name "llama-stack-specification.info.mdx" -type f -exec sed -i '/<span$/,/<\/span>$/d' {} \;
-
-          echo "🏗️ Running Docusaurus build..."
-          npm run build
-        fi
+        echo "🏗️ Running Docusaurus build..."
+        npm run build
 
         echo "✅ Docusaurus build completed"
       env:
@@ -435,35 +266,18 @@ jobs:
 
     - name: Deploy to GitHub Pages
       run: |
-        if [ "${{ steps.content-changes.outputs.CONTENT_CHANGED }}" = 'false' ]; then
-          echo "⚡ Deploying cached build (no content changes detected)"
-        else
-          echo "🗂️ Deploying fresh Docusaurus build..."
-        fi
-
+        echo "🗂️ Deploying Docusaurus build..."
         DOCS_DIR="${{ github.workspace }}/docs"
 
-        # Handle deployment based on whether content changed
-        if [ "${{ steps.content-changes.outputs.CONTENT_CHANGED }}" = 'true' ]; then
-          # Fresh build - deploy new content
-          # Smart deployment: clear everything except .git, .nojekyll, and archived versions
-          find "$DOCS_DIR" -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.nojekyll' ! -name 'v[0-9]*' -exec rm -rf {} +
+        # Clear everything except .git, .nojekyll, and archived versions (static HTML under v*)
+        find "$DOCS_DIR" -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.nojekyll' ! -name 'v[0-9]*' -exec rm -rf {} +
 
-          # Copy Docusaurus build output
-          cp -r "${{ env.TEMP_DIR }}/llama-stack/docs/build/"* "$DOCS_DIR/"
-        else
-          # No content changes - keep existing deployment, just update metadata
-          echo "📂 Keeping existing deployment (content unchanged)"
-        fi
+        # Copy Docusaurus build output
+        cp -r "${{ env.TEMP_DIR }}/llama-stack/docs/build/"* "$DOCS_DIR/"
+        cp "${{ github.workspace }}/versions.html" "$DOCS_DIR/versions.html"
 
         # Ensure .nojekyll exists
         touch "$DOCS_DIR/.nojekyll"
-
-        # Save content hash for future optimization checks
-        if [ -n "${{ steps.content-changes.outputs.CONTENT_HASH }}" ]; then
-          echo "${{ steps.content-changes.outputs.CONTENT_HASH }}" > "$DOCS_DIR/content-hash.txt"
-          echo "💾 Saved content hash for future builds"
-        fi
 
         echo "✅ Docusaurus content deployed"
 
