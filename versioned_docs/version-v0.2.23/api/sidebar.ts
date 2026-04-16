@@ -256,7 +256,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Llama Stack Evaluation API for running evaluations on model and agent candidates.",
+      label: "ogx Evaluation API for running evaluations on model and agent candidates.",
       link: {
         type: "doc",
         id: "api/eval",
@@ -366,7 +366,7 @@ const sidebar: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "Llama Stack Inference API for generating completions, chat completions, and embeddings.",
+      label: "ogx Inference API for generating completions, chat completions, and embeddings.",
       link: {
         type: "doc",
         id: "api/inference",

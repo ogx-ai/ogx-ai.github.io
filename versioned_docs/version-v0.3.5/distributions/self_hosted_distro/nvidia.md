@@ -47,7 +47,7 @@ Make sure you have access to a NVIDIA API Key. You can get one by visiting [http
 The NVIDIA NeMo microservices platform supports end-to-end microservice deployment of a complete AI flywheel on your Kubernetes cluster through the NeMo Microservices Helm Chart. Please reference the [NVIDIA NeMo Microservices documentation](https://docs.nvidia.com/nemo/microservices/latest/about/index.html) for platform prerequisites and instructions to install and deploy the platform.
 
 ## Supported Services
-Each Llama Stack API corresponds to a specific NeMo microservice. The core microservices (Customizer, Evaluator, Guardrails) are exposed by the same endpoint. The platform components (Data Store) are each exposed by separate endpoints.
+Each ogx API corresponds to a specific NeMo microservice. The core microservices (Customizer, Evaluator, Guardrails) are exposed by the same endpoint. The platform components (Data Store) are each exposed by separate endpoints.
 
 ### Inference: NVIDIA NIM
 NVIDIA NIM is used for running inference with registered models. There are two ways to access NVIDIA NIMs:
@@ -62,12 +62,12 @@ The NeMo Data Store microservice serves as the default file storage solution for
 See the [NVIDIA Datasetio docs](https://github.com/meta-llama/llama-stack/blob/main/llama_stack/providers/remote/datasetio/nvidia/README.md) for supported features and example usage.
 
 ### Eval API: NeMo Evaluator
-The NeMo Evaluator microservice supports evaluation of LLMs. Launching an Evaluation job with NeMo Evaluator requires an Evaluation Config (an object that contains metadata needed by the job). A Llama Stack Benchmark maps to an Evaluation Config, so registering a Benchmark creates an Evaluation Config in NeMo Evaluator. The `NVIDIA_EVALUATOR_URL` environment variable should point to your NeMo Microservices endpoint.
+The NeMo Evaluator microservice supports evaluation of LLMs. Launching an Evaluation job with NeMo Evaluator requires an Evaluation Config (an object that contains metadata needed by the job). A ogx Benchmark maps to an Evaluation Config, so registering a Benchmark creates an Evaluation Config in NeMo Evaluator. The `NVIDIA_EVALUATOR_URL` environment variable should point to your NeMo Microservices endpoint.
 
 See the [NVIDIA Eval docs](https://github.com/meta-llama/llama-stack/blob/main/llama_stack/providers/remote/eval/nvidia/README.md) for supported features and example usage.
 
 ### Post-Training API: NeMo Customizer
-The NeMo Customizer microservice supports fine-tuning models. You can reference [this list of supported models](https://github.com/meta-llama/llama-stack/blob/main/llama_stack/providers/remote/post_training/nvidia/models.py) that can be fine-tuned using Llama Stack. The `NVIDIA_CUSTOMIZER_URL` environment variable should point to your NeMo Microservices endpoint.
+The NeMo Customizer microservice supports fine-tuning models. You can reference [this list of supported models](https://github.com/meta-llama/llama-stack/blob/main/llama_stack/providers/remote/post_training/nvidia/models.py) that can be fine-tuned using ogx. The `NVIDIA_CUSTOMIZER_URL` environment variable should point to your NeMo Microservices endpoint.
 
 See the [NVIDIA Post-Training docs](https://github.com/meta-llama/llama-stack/blob/main/llama_stack/providers/remote/post_training/nvidia/README.md) for supported features and example usage.
 
@@ -77,7 +77,7 @@ The NeMo Guardrails microservice sits between your application and the LLM, and 
 See the [NVIDIA Safety docs](https://github.com/meta-llama/llama-stack/blob/main/llama_stack/providers/remote/safety/nvidia/README.md) for supported features and example usage.
 
 ## Deploying models
-In order to use a registered model with the Llama Stack APIs, ensure the corresponding NIM is deployed to your environment. For example, you can use the NIM Proxy microservice to deploy `meta/llama-3.2-1b-instruct`.
+In order to use a registered model with the ogx APIs, ensure the corresponding NIM is deployed to your environment. For example, you can use the NIM Proxy microservice to deploy `meta/llama-3.2-1b-instruct`.
 
 Note: For improved inference speeds, we need to use NIM with `fast_outlines` guided decoding system (specified in the request body). This is the default if you deployed the platform with the NeMo Microservices Helm Chart.
 ```sh
@@ -113,7 +113,7 @@ export NEMO_URL="http://nemo.test"
 curl -X DELETE "$NEMO_URL/v1/deployment/model-deployments/meta/llama-3.1-8b-instruct"
 ```
 
-## Running Llama Stack with NVIDIA
+## Running ogx with NVIDIA
 
 You can do this via venv (build code), or Docker which has a pre-built image.
 

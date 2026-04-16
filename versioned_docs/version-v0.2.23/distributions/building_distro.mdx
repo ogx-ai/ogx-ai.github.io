@@ -1,11 +1,11 @@
 ---
 title: Building Custom Distributions
-description: Building a Llama Stack distribution from scratch
+description: Building a ogx distribution from scratch
 sidebar_label: Build your own Distribution
 sidebar_position: 3
 ---
 
-This guide will walk you through the steps to get started with building a Llama Stack distribution from scratch with your choice of API providers.
+This guide will walk you through the steps to get started with building a ogx distribution from scratch with your choice of API providers.
 
 
 ### Setting your log level
@@ -39,7 +39,7 @@ The default global log level is `info`. `all` sets the log level for all compone
 
 A user can also set `LLAMA_STACK_LOG_FILE` which will pipe the logs to the specified path as well as to the terminal. An example would be: `export LLAMA_STACK_LOG_FILE=server.log`
 
-### Llama Stack Build
+### ogx Build
 
 In order to build your own distribution, we recommend you clone the `llama-stack` repository.
 
@@ -71,7 +71,7 @@ options:
   --distro DISTRIBUTION, --distribution DISTRIBUTION
                         Name of the distribution to use for build. You may use `llama stack build --list-distros` to check out the available distributions (default: None)
   --list-distros, --list-distributions
-                        Show the available distributions for building a Llama Stack distribution (default: False)
+                        Show the available distributions for building a ogx distribution (default: False)
   --image-type {container,venv}
                         Image Type to use for the build. If not specified, will use the image type from the template config. (default: None)
   --image-name IMAGE_NAME
@@ -110,13 +110,13 @@ llama stack build --list-templates
 +------------------------------+-----------------------------------------------------------------------------+
 | tgi                          | Use (an external) TGI server for running LLM inference                      |
 +------------------------------+-----------------------------------------------------------------------------+
-| starter                      | Quick start template for running Llama Stack with several popular providers |
+| starter                      | Quick start template for running ogx with several popular providers |
 +------------------------------+-----------------------------------------------------------------------------+
 | sambanova                    | Use SambaNova for running LLM inference and safety                          |
 +------------------------------+-----------------------------------------------------------------------------+
 | remote-vllm                  | Use (an external) vLLM server for running LLM inference                     |
 +------------------------------+-----------------------------------------------------------------------------+
-| postgres-demo                | Quick start template for running Llama Stack with several popular providers |
+| postgres-demo                | Quick start template for running ogx with several popular providers |
 +------------------------------+-----------------------------------------------------------------------------+
 | passthrough                  | Use Passthrough hosted llama-stack endpoint for LLM inference               |
 +------------------------------+-----------------------------------------------------------------------------+
@@ -140,7 +140,7 @@ llama stack build --list-templates
 +------------------------------+-----------------------------------------------------------------------------+
 | experimental-post-training   | Experimental template for post training                                     |
 +------------------------------+-----------------------------------------------------------------------------+
-| dell                         | Dell's distribution of Llama Stack. TGI inference via Dell's custom         |
+| dell                         | Dell's distribution of ogx. TGI inference via Dell's custom         |
 |                              | container                                                                   |
 +------------------------------+-----------------------------------------------------------------------------+
 | ci-tests                     | Distribution for running e2e tests in CI                                    |
@@ -172,10 +172,10 @@ It would be best to start with a template and understand the structure of the co
 ```
 llama stack build
 
-> Enter a name for your Llama Stack (e.g. my-local-stack): my-stack
-> Enter the image type you want your Llama Stack to be built as (container or venv): venv
+> Enter a name for your ogx (e.g. my-local-stack): my-stack
+> Enter the image type you want your ogx to be built as (container or venv): venv
 
-Llama Stack is composed of several APIs working together. Let's select
+ogx is composed of several APIs working together. Let's select
 the provider types (implementations) you want to use for these APIs.
 
 Tip: use <TAB> to see options for the providers.
@@ -189,7 +189,7 @@ Tip: use <TAB> to see options for the providers.
 > Enter provider for API eval: inline::meta-reference
 > Enter provider for API telemetry: inline::meta-reference
 
- > (Optional) Enter a short description for your Llama Stack:
+ > (Optional) Enter a short description for your ogx:
 
 You can now edit ~/.llama/distributions/llamastack-my-local-stack/my-local-stack-run.yaml and run `llama stack run ~/.llama/distributions/llamastack-my-local-stack/my-local-stack-run.yaml`
 ```
@@ -205,7 +205,7 @@ llama stack build --config llama_stack/distributions/starter/build.yaml
 </TabItem>
 <TabItem value="external" label="Building with External Providers">
 
-Llama Stack supports external providers that live outside of the main codebase. This allows you to create and maintain your own providers independently or use community-provided providers.
+ogx supports external providers that live outside of the main codebase. This allows you to create and maintain your own providers independently or use community-provided providers.
 
 To build a distribution with external providers, you need to:
 
@@ -275,7 +275,7 @@ Containerfile created successfully in /tmp/tmp.viA3a3Rdsg/ContainerfileFROM pyth
 You can now edit ~/meta-llama/llama-stack/tmp/configs/ollama-run.yaml and run `llama stack run ~/meta-llama/llama-stack/tmp/configs/ollama-run.yaml`
 ```
 
-Now set some environment variables for the inference model ID and Llama Stack Port and create a local directory to mount into the container's file system.
+Now set some environment variables for the inference model ID and ogx Port and create a local directory to mount into the container's file system.
 
 ```bash
 export INFERENCE_MODEL="llama3.2:3b"
@@ -316,7 +316,7 @@ Here are the docker flags and their uses:
 
 
 ### Running your Stack server
-Now, let's start the Llama Stack Distribution Server. You will need the YAML configuration file which was written out at the end by the `llama stack build` step.
+Now, let's start the ogx Distribution Server. You will need the YAML configuration file which was written out at the end by the `llama stack build` step.
 
 ```
 llama stack run -h
@@ -324,7 +324,7 @@ usage: llama stack run [-h] [--port PORT] [--image-name IMAGE_NAME] [--env KEY=V
                        [--image-type {venv}] [--enable-ui]
                        [config | template]
 
-Start the server for a Llama Stack Distribution. You should have already built (or downloaded) and configured the distribution.
+Start the server for a ogx Distribution. You should have already built (or downloaded) and configured the distribution.
 
 positional arguments:
   config | template     Path to config file to use for the run or name of known template (`llama stack list` for a list). (default: None)
@@ -384,7 +384,7 @@ INFO:     2401:db00:35c:2d2b:face:0:c9:0:54678 - "GET /models/list HTTP/1.1" 200
 ```
 
 ### Listing Distributions
-Using the list command, you can view all existing Llama Stack distributions, including stacks built from templates, from scratch, or using custom configuration files.
+Using the list command, you can view all existing ogx distributions, including stacks built from templates, from scratch, or using custom configuration files.
 
 ```
 llama stack list -h

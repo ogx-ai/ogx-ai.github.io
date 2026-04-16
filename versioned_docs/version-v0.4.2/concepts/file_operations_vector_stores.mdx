@@ -2,14 +2,14 @@
 
 ## Overview
 
-Llama Stack provides seamless integration between the Files API and Vector Store APIs, enabling you to upload documents and automatically process them into searchable vector embeddings. This integration implements file operations following the [OpenAI Vector Store Files API specification](https://platform.openai.com/docs/api-reference/vector-stores-files).
+ogx provides seamless integration between the Files API and Vector Store APIs, enabling you to upload documents and automatically process them into searchable vector embeddings. This integration implements file operations following the [OpenAI Vector Store Files API specification](https://platform.openai.com/docs/api-reference/vector-stores-files).
 
 ## Enhanced Capabilities Beyond OpenAI
 
-While Llama Stack maintains full compatibility with OpenAI's Vector Store API, it provides several additional capabilities that enhance functionality and flexibility:
+While ogx maintains full compatibility with OpenAI's Vector Store API, it provides several additional capabilities that enhance functionality and flexibility:
 
 ### **Embedding Model Specification**
-Unlike OpenAI's vector stores which use a fixed embedding model, Llama Stack allows you to specify which embedding model to use when creating a vector store:
+Unlike OpenAI's vector stores which use a fixed embedding model, ogx allows you to specify which embedding model to use when creating a vector store:
 
 ```python
 # Create vector store with specific embedding model
@@ -23,7 +23,7 @@ vector_store = client.vector_stores.create(
 ```
 
 ### **Advanced Search Modes**
-Llama Stack supports multiple search modes beyond basic vector similarity:
+ogx supports multiple search modes beyond basic vector similarity:
 
 - **Vector Search**: Pure semantic similarity search using embeddings
 - **Keyword Search**: Traditional keyword-based search for exact matches
@@ -40,7 +40,7 @@ results = await client.vector_stores.search(
 ```
 
 ### **Flexible Ranking Options**
-For hybrid search, Llama Stack offers configurable ranking strategies:
+For hybrid search, ogx offers configurable ranking strategies:
 
 - **RRF (Reciprocal Rank Fusion)**: Combines rankings with configurable impact factor
 - **Weighted Ranker**: Linear combination of vector and keyword scores with adjustable weights
@@ -75,7 +75,7 @@ vector_store = client.vector_stores.create(
 )
 ```
 
-**Note**: All Llama Stack-specific parameters (`provider_id`, `embedding_model`, and `embedding_dimension`) must be specified in the `extra_body` parameter when creating vector stores.
+**Note**: All ogx-specific parameters (`provider_id`, `embedding_model`, and `embedding_dimension`) must be specified in the `extra_body` parameter when creating vector stores.
 
 ## How It Works
 
@@ -192,7 +192,7 @@ file_attach_response = await client.vector_stores.files.create(
 )
 ```
 
-**Note**: While Llama Stack is OpenAI-compatible, it also supports additional options beyond the standard OpenAI API. When creating vector stores, you can specify custom embedding models and embedding dimensions that will be used when processing chunks from attached files.
+**Note**: While ogx is OpenAI-compatible, it also supports additional options beyond the standard OpenAI API. When creating vector stores, you can specify custom embedding models and embedding dimensions that will be used when processing chunks from attached files.
 
 
 ## File Management

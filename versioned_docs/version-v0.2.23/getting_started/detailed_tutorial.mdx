@@ -1,6 +1,6 @@
 ---
 title: Detailed Tutorial
-description: Complete guide to using Llama Stack server and client SDK to build AI agents
+description: Complete guide to using ogx server and client SDK to build AI agents
 sidebar_label: Detailed Tutorial
 sidebar_position: 3
 ---
@@ -10,14 +10,14 @@ import TabItem from '@theme/TabItem';
 
 ## Detailed Tutorial
 
-In this guide, we'll walk through how you can use the Llama Stack (server and client SDK) to test a simple agent.
-A Llama Stack agent is a simple integrated system that can perform tasks by combining a Llama model for reasoning with
+In this guide, we'll walk through how you can use the ogx (server and client SDK) to test a simple agent.
+A ogx agent is a simple integrated system that can perform tasks by combining a Llama model for reasoning with
 tools (e.g., RAG, web search, code execution, etc.) for taking actions.
-In Llama Stack, we provide a server exposing multiple APIs. These APIs are backed by implementations from different providers.
+In ogx, we provide a server exposing multiple APIs. These APIs are backed by implementations from different providers.
 
-Llama Stack is a stateful service with REST APIs to support seamless transition of AI applications across different environments. The server can be run in a variety of ways, including as a standalone binary, Docker container, or hosted service. You can build and test using a local server first and deploy to a hosted endpoint for production.
+ogx is a stateful service with REST APIs to support seamless transition of AI applications across different environments. The server can be run in a variety of ways, including as a standalone binary, Docker container, or hosted service. You can build and test using a local server first and deploy to a hosted endpoint for production.
 
-In this guide, we'll walk through how to build a RAG agent locally using Llama Stack with [Ollama](https://ollama.com/)
+In this guide, we'll walk through how to build a RAG agent locally using ogx with [Ollama](https://ollama.com/)
 as the inference [provider](/docs/providers/inference/) for a Llama Model.
 
 ### Step 1: Installation and Setup
@@ -53,16 +53,16 @@ Setup your virtual environment.
 uv sync --python 3.12
 source .venv/bin/activate
 ```
-### Step 2:  Run Llama Stack
-Llama Stack is a server that exposes multiple APIs, you connect with it using the Llama Stack client SDK.
+### Step 2:  Run ogx
+ogx is a server that exposes multiple APIs, you connect with it using the ogx client SDK.
 
 <Tabs>
 <TabItem value="venv" label="Using venv">
-You can use Python to build and run the Llama Stack server, which is useful for testing and development.
+You can use Python to build and run the ogx server, which is useful for testing and development.
 
-Llama Stack uses a [YAML configuration file](../distributions/configuration) to specify the stack setup,
+ogx uses a [YAML configuration file](../distributions/configuration) to specify the stack setup,
 which defines the providers and their settings. The generated configuration serves as a starting point that you can [customize for your specific needs](../distributions/customizing_run_yaml).
-Now let's build and run the Llama Stack config for Ollama.
+Now let's build and run the ogx config for Ollama.
 We use `starter` as template. By default all providers are disabled, this requires enable ollama by passing environment variables.
 
 ```bash
@@ -70,7 +70,7 @@ llama stack build --distro starter --image-type venv --run
 ```
 </TabItem>
 <TabItem value="container" label="Using a Container">
-You can use a container image to run the Llama Stack server. We provide several container images for the server
+You can use a container image to run the ogx server. We provide several container images for the server
 component that works with different inference providers out of the box. For this guide, we will use
 `llamastack/distribution-starter` as the container image. If you'd like to build your own image or customize the
 configurations, please check out [this guide](../distributions/building_distro).
@@ -117,9 +117,9 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://['::', '0.0.0.0']:8321 (Press CTRL+C to quit)
 ```
 
-Now you can use the Llama Stack client to run inference and build agents!
+Now you can use the ogx client to run inference and build agents!
 
-You can reuse the server setup or use the [Llama Stack Client](https://github.com/meta-llama/llama-stack-client-python/).
+You can reuse the server setup or use the [ogx Client](https://github.com/meta-llama/llama-stack-client-python/).
 Note that the client package is already included in the `llama-stack` package.
 </TabItem>
 </Tabs>
@@ -153,7 +153,7 @@ llama-stack-client configure --endpoint http://localhost:8321 --api-key none
 ```
 You will see the below:
 ```
-Done! You can now use the Llama Stack Client CLI with endpoint http://localhost:8321
+Done! You can now use the ogx Client CLI with endpoint http://localhost:8321
 ```
 
 List the models
@@ -221,7 +221,7 @@ Other SDKs are also available, please refer to the [Client SDK](/docs/) list for
 
 <Tabs>
 <TabItem value="inference" label="Basic Inference">
-Now you can run inference using the Llama Stack client SDK.
+Now you can run inference using the ogx client SDK.
 
 #### i. Create the Script
 
@@ -262,7 +262,7 @@ OpenAIChatCompletion(id='chatcmpl-30cd0f28-a2ad-4b6d-934b-13707fc60ebf', choices
 ```
 </TabItem>
 <TabItem value="agent" label="Build a Simple Agent">
-Next we can move beyond simple inference and build an agent that can perform tasks using the Llama Stack server.
+Next we can move beyond simple inference and build an agent that can perform tasks using the ogx server.
 #### i. Create the Script
 Create a file `agent.py` and add the following code:
 
@@ -538,4 +538,4 @@ uv run python rag_agent.py
 
 **You're Ready to Build Your Own Apps!**
 
-Congrats! 🥳 Now you're ready to [build your own Llama Stack applications](../building_applications/)! 🚀
+Congrats! 🥳 Now you're ready to [build your own ogx applications](../building_applications/)! 🚀

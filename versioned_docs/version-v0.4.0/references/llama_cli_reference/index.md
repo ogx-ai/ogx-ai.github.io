@@ -1,10 +1,10 @@
 # llama (server-side) CLI Reference
 
-The `llama` CLI tool helps you set up and use the Llama Stack. The CLI is available on your path after installing the `llama-stack` package.
+The `llama` CLI tool helps you set up and use the ogx. The CLI is available on your path after installing the `llama-stack` package.
 
 ## Installation
 
-You have two ways to install Llama Stack:
+You have two ways to install ogx:
 
 1. **Install as a package**:
    You can install the repository directly from [PyPI](https://pypi.org/project/llama-stack/) by running the following command:
@@ -27,7 +27,7 @@ You have two ways to install Llama Stack:
 
 
 ## `llama` subcommands
-1. `stack`: Allows you to build a stack using the `llama stack` distribution and run a Llama Stack server. You can read more about how to build a Llama Stack distribution in the [Build your own Distribution](../distributions/building_distro) documentation.
+1. `stack`: Allows you to build a stack using the `llama stack` distribution and run a ogx server. You can read more about how to build a ogx distribution in the [Build your own Distribution](../distributions/building_distro) documentation.
 
 For downloading models, we recommend using the [Hugging Face CLI](https://huggingface.co/docs/huggingface_hub/guides/cli). See [Downloading models](#downloading-models) for more information.
 
@@ -48,7 +48,7 @@ options:
 subcommands:
   {stack}
 
-  stack                 Operations for the Llama Stack / Distributions
+  stack                 Operations for the ogx / Distributions
 ```
 
 ## Downloading models

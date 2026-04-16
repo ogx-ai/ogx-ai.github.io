@@ -1,6 +1,6 @@
 ---
 title: Kubernetes Deployment Guide
-description: Deploy Llama Stack on Kubernetes clusters with vLLM inference service
+description: Deploy ogx on Kubernetes clusters with vLLM inference service
 sidebar_label: Kubernetes
 sidebar_position: 2
 ---
@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 
 # Kubernetes Deployment Guide
 
-Deploy Llama Stack and vLLM servers in a Kubernetes cluster instead of running them locally. This guide covers both local development with Kind and production deployment on AWS EKS.
+Deploy ogx and vLLM servers in a Kubernetes cluster instead of running them locally. This guide covers both local development with Kind and production deployment on AWS EKS.
 
 ## Prerequisites
 
@@ -110,7 +110,7 @@ spec:
 EOF
 ```
 
-### Step 3: Configure Llama Stack
+### Step 3: Configure ogx
 
 Update your run configuration:
 
@@ -137,7 +137,7 @@ EOF
 podman build -f $tmp_dir/Containerfile.llama-stack-run-k8s -t llama-stack-run-k8s $tmp_dir
 ```
 
-### Step 4: Deploy Llama Stack Server
+### Step 4: Deploy ogx Server
 
 ```yaml
 cat <<EOF | kubectl apply -f -
@@ -220,5 +220,5 @@ kubectl run -it --rm debug --image=curlimages/curl --restart=Never -- curl http:
 ## Related Resources
 
 - **[Deployment Overview](/docs/deploying/)** - Overview of deployment options
-- **[Distributions](/docs/distributions)** - Understanding Llama Stack distributions
+- **[Distributions](/docs/distributions)** - Understanding ogx distributions
 - **[Configuration](/docs/distributions/configuration)** - Detailed configuration options

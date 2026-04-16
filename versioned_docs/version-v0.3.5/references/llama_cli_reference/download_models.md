@@ -1,10 +1,10 @@
 # Downloading Models
 
-The `llama` CLI tool helps you setup and use the Llama Stack. It should be available on your path after installing the `llama-stack` package.
+The `llama` CLI tool helps you setup and use the ogx. It should be available on your path after installing the `llama-stack` package.
 
 ## Installation
 
-You have two ways to install Llama Stack:
+You have two ways to install ogx:
 
 1. **Install as a package**:
    You can install the repository directly from [PyPI](https://pypi.org/project/llama-stack/) by running the following command:

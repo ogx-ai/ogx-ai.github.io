@@ -1,6 +1,6 @@
 # API Reference Overview
 
-The Llama Stack provides a comprehensive set of APIs organized by stability level to help you choose the right endpoints for your use case.
+The ogx provides a comprehensive set of APIs organized by stability level to help you choose the right endpoints for your use case.
 
 ## 🟢 Stable APIs
 

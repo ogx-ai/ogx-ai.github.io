@@ -91,7 +91,7 @@ The distribution supports several vector storage providers:
 - **Tool Runtime**: Web search (Brave, Tavily) and RAG capabilities
 - **Evaluation**: Meta reference evaluation framework
 
-## Running Llama Stack with OCI
+## Running ogx with OCI
 
 You can run the OCI distribution via Docker or local virtual environment.
 
@@ -140,4 +140,4 @@ https://docs.oracle.com/en-us/iaas/Content/generative-ai/overview.htm#regions
 
 For additional support:
 - [OCI Generative AI Documentation](https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm)
-- [Llama Stack Issues](https://github.com/meta-llama/llama-stack/issues)
+- [ogx Issues](https://github.com/meta-llama/llama-stack/issues)

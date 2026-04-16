@@ -1,6 +1,6 @@
 # API Reference Overview
 
-The Llama Stack API provides comprehensive functionality for building generative AI applications.
+The ogx API provides comprehensive functionality for building generative AI applications.
 
 ## 🟢 Stable APIs
 

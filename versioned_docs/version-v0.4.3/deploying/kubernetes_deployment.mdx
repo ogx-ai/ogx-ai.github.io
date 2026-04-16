@@ -1,6 +1,6 @@
 ---
 title: Kubernetes Deployment Guide
-description: Deploy Llama Stack on Kubernetes clusters with vLLM inference service
+description: Deploy ogx on Kubernetes clusters with vLLM inference service
 sidebar_label: Kubernetes
 sidebar_position: 2
 ---
@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 
 # Kubernetes Deployment Guide
 
-Deploy Llama Stack and vLLM servers in a Kubernetes cluster instead of running them locally. This guide covers deployment using the Kubernetes operator to manage the Llama Stack server with Kind. The vLLM inference server is deployed manually.
+Deploy ogx and vLLM servers in a Kubernetes cluster instead of running them locally. This guide covers deployment using the Kubernetes operator to manage the ogx server with Kind. The vLLM inference server is deployed manually.
 
 ## Prerequisites
 
@@ -112,7 +112,7 @@ EOF
 
 ### Step 3: Install Kubernetes Operator
 
-Install the Llama Stack Kubernetes operator to manage Llama Stack deployments:
+Install the ogx Kubernetes operator to manage ogx deployments:
 
 ```bash
 # Install from the latest main branch
@@ -128,12 +128,12 @@ Verify the operator is running:
 kubectl get pods -n llama-stack-k8s-operator-system
 ```
 
-For more information about the operator, see the [llama-stack-k8s-operator repository](https://github.com/llamastack/llama-stack-k8s-operator).
+For more information about the operator, see the [llama-stack-k8s-operator repository](https://github.com/ogx-ai/ogx-k8s-operator).
 
-### Step 4: Deploy Llama Stack Server using Operator
+### Step 4: Deploy ogx Server using Operator
 
-Create a `LlamaStackDistribution` custom resource to deploy the Llama Stack server. The operator will automatically create the necessary Deployment, Service, and other resources.
-You can optionally override the default `config.yaml` using `spec.server.userConfig` with a ConfigMap (see [userConfig spec](https://github.com/llamastack/llama-stack-k8s-operator/blob/main/docs/api-overview.md#userconfigspec)).
+Create a `LlamaStackDistribution` custom resource to deploy the ogx server. The operator will automatically create the necessary Deployment, Service, and other resources.
+You can optionally override the default `config.yaml` using `spec.server.userConfig` with a ConfigMap (see [userConfig spec](https://github.com/ogx-ai/ogx-k8s-operator/blob/main/docs/api-overview.md#userconfigspec)).
 
 ```yaml
 cat <<EOF | kubectl apply -f -
@@ -167,19 +167,19 @@ EOF
 
 **Configuration Options:**
 
-- `replicas`: Number of Llama Stack server instances to run
-- `server.distribution.name`: The distribution to use (e.g., `starter` for the starter distribution). See the [list of supported distributions](https://github.com/llamastack/llama-stack-k8s-operator/blob/main/distributions.json) in the operator repository.
+- `replicas`: Number of ogx server instances to run
+- `server.distribution.name`: The distribution to use (e.g., `starter` for the starter distribution). See the [list of supported distributions](https://github.com/ogx-ai/ogx-k8s-operator/blob/main/distributions.json) in the operator repository.
 - `server.distribution.image`: (Optional) Custom container image for non-supported distributions. Use this field when deploying a distribution that is not in the supported list. If specified, this takes precedence over `name`.
-- `server.containerSpec.port`: Port on which the Llama Stack server listens (default: 8321)
+- `server.containerSpec.port`: Port on which the ogx server listens (default: 8321)
 - `server.containerSpec.env`: Environment variables to configure providers:
-- `server.userConfig`: (Optional) Override the default `config.yaml` using a ConfigMap. See [userConfig spec](https://github.com/llamastack/llama-stack-k8s-operator/blob/main/docs/api-overview.md#userconfigspec).
+- `server.userConfig`: (Optional) Override the default `config.yaml` using a ConfigMap. See [userConfig spec](https://github.com/ogx-ai/ogx-k8s-operator/blob/main/docs/api-overview.md#userconfigspec).
 - `server.storage.size`: Size of the persistent volume for model and data storage
 - `server.storage.mountPath`: Where to mount the storage in the container
 
-**Note:** For a complete list of supported distributions, see [distributions.json](https://github.com/llamastack/llama-stack-k8s-operator/blob/main/distributions.json) in the operator repository. To use a custom or non-supported distribution, set the `server.distribution.image` field with your container image instead of  `server.distribution.name`.
+**Note:** For a complete list of supported distributions, see [distributions.json](https://github.com/ogx-ai/ogx-k8s-operator/blob/main/distributions.json) in the operator repository. To use a custom or non-supported distribution, set the `server.distribution.image` field with your container image instead of  `server.distribution.name`.
 
 The operator automatically creates:
-- A Deployment for the Llama Stack server
+- A Deployment for the ogx server
 - A Service to access the server
 - A PersistentVolumeClaim for storage
 - All necessary RBAC resources
@@ -194,7 +194,7 @@ kubectl describe llamastackdistribution llamastack-vllm
 
 ### Step 5: Test Deployment
 
-Wait for the Llama Stack server pod to be ready:
+Wait for the ogx server pod to be ready:
 
 ```bash
 # Check the status of the LlamaStackDistribution
@@ -238,7 +238,7 @@ kubectl logs -l app.kubernetes.io/name=vllm
 kubectl run -it --rm debug --image=curlimages/curl --restart=Never -- curl http://vllm-server:8000/v1/models
 ```
 
-### Llama Stack Server Issues
+### ogx Server Issues
 
 **Check LlamaStackDistribution status:**
 ```bash
@@ -279,7 +279,7 @@ kubectl run -it --rm debug --image=curlimages/curl --restart=Never -- curl http:
 ## Related Resources
 
 - **[Deployment Overview](/docs/deploying/)** - Overview of deployment options
-- **[Distributions](/docs/distributions)** - Understanding Llama Stack distributions
+- **[Distributions](/docs/distributions)** - Understanding ogx distributions
 - **[Configuration](/docs/distributions/configuration)** - Detailed configuration options
-- **[LlamaStack Operator](https://github.com/llamastack/llama-stack-k8s-operator)** - Overview of llama-stack kubernetes operator
-- **[LlamaStackDistribution](https://github.com/llamastack/llama-stack-k8s-operator/blob/main/docs/api-overview.md)** - API Spec of the llama-stack operator Custom Resource.
+- **[LlamaStack Operator](https://github.com/ogx-ai/ogx-k8s-operator)** - Overview of llama-stack kubernetes operator
+- **[LlamaStackDistribution](https://github.com/ogx-ai/ogx-k8s-operator/blob/main/docs/api-overview.md)** - API Spec of the llama-stack operator Custom Resource.

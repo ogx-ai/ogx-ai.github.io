@@ -7,11 +7,11 @@
 """
 Demo script showing RAG with both Responses API and Chat Completions API.
 
-This example demonstrates two approaches to RAG with Llama Stack:
+This example demonstrates two approaches to RAG with ogx:
 1. Responses API - Automatic agentic tool calling with file search
 2. Chat Completions API - Manual retrieval with explicit control
 
-Run this script after starting a Llama Stack server:
+Run this script after starting a ogx server:
     llama stack run starter
 """
 
@@ -21,7 +21,7 @@ import os
 import requests
 from openai import OpenAI
 
-# Initialize OpenAI client pointing to Llama Stack server
+# Initialize OpenAI client pointing to ogx server
 client = OpenAI(base_url="http://localhost:8321/v1/", api_key="none")
 
 print("RAG demonstration\n")
