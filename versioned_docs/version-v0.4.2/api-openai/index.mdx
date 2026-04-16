@@ -1,17 +1,17 @@
 ---
 title: OpenAI API Compatibility
-description: OpenAI-compatible APIs and features in Llama Stack
+description: OpenAI-compatible APIs and features in ogx
 sidebar_label: OpenAI Compatibility
 sidebar_position: 1
 ---
 
 # OpenAI API Compatibility
 
-Llama Stack provides comprehensive OpenAI API compatibility, allowing you to use existing OpenAI API clients and tools with Llama Stack providers. This compatibility layer ensures seamless migration and interoperability.
+ogx provides comprehensive OpenAI API compatibility, allowing you to use existing OpenAI API clients and tools with ogx providers. This compatibility layer ensures seamless migration and interoperability.
 
 ## Overview
 
-OpenAI API compatibility in Llama Stack includes:
+OpenAI API compatibility in ogx includes:
 
 - **OpenAI-compatible endpoints** for all major APIs
 - **Request/response format compatibility** with OpenAI standards
@@ -103,23 +103,23 @@ OpenAI-compatible batch processing for large-scale operations.
 ## Migration from OpenAI
 
 ### Step 1: Update API Endpoint
-Change your API endpoint from OpenAI to your Llama Stack server:
+Change your API endpoint from OpenAI to your ogx server:
 
 ```python
 # Before (OpenAI)
 import openai
 client = openai.OpenAI(api_key="your-openai-key")
 
-# After (Llama Stack)
+# After (ogx)
 import openai
 client = openai.OpenAI(
     api_key="your-llama-stack-key",
-    base_url="http://localhost:8000/v1"  # Your Llama Stack server
+    base_url="http://localhost:8000/v1"  # Your ogx server
 )
 ```
 
 ### Step 2: Configure Providers
-Set up your preferred providers in the Llama Stack configuration:
+Set up your preferred providers in the ogx configuration:
 
 ```yaml
 # stack-config.yaml
@@ -131,7 +131,7 @@ inference:
 ```
 
 ### Step 3: Test Compatibility
-Verify that your existing code works with Llama Stack:
+Verify that your existing code works with ogx:
 
 ```python
 # Test chat completions
@@ -163,7 +163,7 @@ print(response.choices[0].message.content)
 
 ## Authentication
 
-Llama Stack supports OpenAI-style authentication:
+ogx supports OpenAI-style authentication:
 
 ### API Key Authentication
 ```python
@@ -181,7 +181,7 @@ export OPENAI_BASE_URL="http://localhost:8000/v1"
 
 ## Error Handling
 
-Llama Stack provides OpenAI-compatible error responses:
+ogx provides OpenAI-compatible error responses:
 
 ```python
 try:
@@ -284,4 +284,4 @@ Upcoming OpenAI compatibility features:
 - **Improved error handling** and diagnostics
 - **Performance optimizations** for large-scale deployments
 
-For the latest updates, follow our [GitHub releases](https://github.com/llamastack/llama-stack/releases) and [roadmap discussions](https://github.com/llamastack/llama-stack/discussions).
+For the latest updates, follow our [GitHub releases](https://github.com/ogx-ai/llama-stack/releases) and [roadmap discussions](https://github.com/ogx-ai/llama-stack/discussions).

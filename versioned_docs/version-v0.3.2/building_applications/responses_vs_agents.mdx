@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 
 # Agents vs OpenAI Responses API
 
-Llama Stack (LLS) provides two different APIs for building AI applications with tool calling capabilities: the **Agents API** and the **OpenAI Responses API**. While both enable AI systems to use tools, and maintain full conversation history, they serve different use cases and have distinct characteristics.
+ogx (LLS) provides two different APIs for building AI applications with tool calling capabilities: the **Agents API** and the **OpenAI Responses API**. While both enable AI systems to use tools, and maintain full conversation history, they serve different use cases and have distinct characteristics.
 
 :::note
 **Note:** For simple and basic inferencing, you may want to use the [Chat Completions API](../providers/openai#chat-completions) directly, before progressing to Agents or Responses API.
@@ -172,7 +172,7 @@ Both APIs demonstrate distinct strengths that make them valuable on their own fo
 ### 3. OpenAI Migration with Advanced Tool Capabilities
 **Best Choice: Responses API**
 
-**Scenario:** You have an existing application built with OpenAI's Assistants API that uses file search and web search capabilities. You want to migrate to Llama Stack for better performance and cost control while maintaining the same tool calling patterns and adding new capabilities like dynamic vector store selection.
+**Scenario:** You have an existing application built with OpenAI's Assistants API that uses file search and web search capabilities. You want to migrate to ogx for better performance and cost control while maintaining the same tool calling patterns and adding new capabilities like dynamic vector store selection.
 
 **Why Responses API?** The Responses API provides full OpenAI tool compatibility (`web_search`, `file_search`) with identical syntax, making migration seamless. The dynamic per-call configuration enables advanced features like switching vector stores per query or changing models based on query complexity - capabilities that extend beyond basic OpenAI functionality while maintaining compatibility.
 

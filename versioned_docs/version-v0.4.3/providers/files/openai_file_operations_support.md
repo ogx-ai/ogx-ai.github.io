@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a comprehensive overview of file operations and Vector Store API support across all available vector store providers in Llama Stack. As of release 0.2.24, the following providers support full file operations integration.
+This document provides a comprehensive overview of file operations and Vector Store API support across all available vector store providers in ogx. As of release 0.2.24, the following providers support full file operations integration.
 
 ## Supported Providers
 

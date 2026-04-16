@@ -33,7 +33,7 @@ compose.yaml  README.md  run.yaml
 $ docker compose up
 ```
 
-The script will first start up TGI server, then start up Llama Stack distribution server hooking up to the remote TGI provider for inference. You should be able to see the following outputs --
+The script will first start up TGI server, then start up ogx distribution server hooking up to the remote TGI provider for inference. You should be able to see the following outputs --
 ```
 [text-generation-inference] | 2024-10-15T18:56:33.810397Z  INFO text_generation_router::server: router/src/server.rs:1813: Using config Some(Llama)
 [text-generation-inference] | 2024-10-15T18:56:33.810448Z  WARN text_generation_router::server: router/src/server.rs:1960: Invalid hostname, defaulting to 0.0.0.0
@@ -62,7 +62,7 @@ registry.dell.huggingface.co/enterprise-dell-inference-meta-llama-meta-llama-3.1
 ```
 
 
-#### Start Llama Stack server pointing to TGI server
+#### Start ogx server pointing to TGI server
 
 ```
 docker run --pull always --network host -it -p 8321:8321 -v ./run.yaml:/root/my-run.yaml --gpus=all llamastack/distribution-tgi --yaml_config /root/my-run.yaml

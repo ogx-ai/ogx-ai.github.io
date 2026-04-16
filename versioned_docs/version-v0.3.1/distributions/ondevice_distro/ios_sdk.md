@@ -1,6 +1,6 @@
 # iOS SDK
 
-We offer both remote and on-device use of Llama Stack in Swift via a single SDK [llama-stack-client-swift](https://github.com/meta-llama/llama-stack-client-swift/) that contains two components:
+We offer both remote and on-device use of ogx in Swift via a single SDK [llama-stack-client-swift](https://github.com/meta-llama/llama-stack-client-swift/) that contains two components:
 1. LlamaStackClient for remote
 2. Local Inference for on-device
 
@@ -12,7 +12,7 @@ We offer both remote and on-device use of Llama Stack in Swift via a single SDK 
 
 ## Remote Only
 
-If you don't want to run inference on-device, then you can connect to any hosted Llama Stack distribution with #1.
+If you don't want to run inference on-device, then you can connect to any hosted ogx distribution with #1.
 
 1. Add `https://github.com/meta-llama/llama-stack-client-swift/` as a Package Dependency in Xcode
 
@@ -47,7 +47,7 @@ Check out [iOSCalendarAssistant](https://github.com/meta-llama/llama-stack-clien
 
 LocalInference provides a local inference implementation powered by [executorch](https://github.com/pytorch/executorch/).
 
-Llama Stack currently supports on-device inference for iOS with Android coming soon. You can run on-device inference on Android today using [executorch](https://github.com/pytorch/executorch/tree/main/examples/demo-apps/android/LlamaDemo), PyTorch’s on-device inference library.
+ogx currently supports on-device inference for iOS with Android coming soon. You can run on-device inference on Android today using [executorch](https://github.com/pytorch/executorch/tree/main/examples/demo-apps/android/LlamaDemo), PyTorch’s on-device inference library.
 
 The APIs *work the same as remote* – the only difference is you'll instead use the `LocalAgents` / `LocalInference` classes and pass in a `DispatchQueue`:
 

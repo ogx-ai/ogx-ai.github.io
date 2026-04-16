@@ -1,13 +1,13 @@
 ---
 description: |
-  [PGVector](https://github.com/pgvector/pgvector) is a remote vector database provider for Llama Stack. It
+  [PGVector](https://github.com/pgvector/pgvector) is a remote vector database provider for ogx. It
   allows you to store and query vectors directly in memory.
   That means you'll get fast and efficient vector retrieval.
 
   ## Features
 
   - Easy to use
-  - Fully integrated with Llama Stack
+  - Fully integrated with ogx
 
   There are three implementations of search for PGVectoIndex available:
 
@@ -65,10 +65,10 @@ description: |
 
   ## Usage
 
-  To use PGVector in your Llama Stack project, follow these steps:
+  To use PGVector in your ogx project, follow these steps:
 
   1. Install the necessary dependencies.
-  2. Configure your Llama Stack project to use pgvector. (e.g. remote::pgvector).
+  2. Configure your ogx project to use pgvector. (e.g. remote::pgvector).
   3. Start storing and querying vectors.
 
   ## This is an example how you can set up your environment for using PGVector
@@ -108,14 +108,14 @@ title: remote::pgvector
 ## Description
 
 
-[PGVector](https://github.com/pgvector/pgvector) is a remote vector database provider for Llama Stack. It
+[PGVector](https://github.com/pgvector/pgvector) is a remote vector database provider for ogx. It
 allows you to store and query vectors directly in memory.
 That means you'll get fast and efficient vector retrieval.
 
 ## Features
 
 - Easy to use
-- Fully integrated with Llama Stack
+- Fully integrated with ogx
 
 There are three implementations of search for PGVectoIndex available:
 
@@ -173,10 +173,10 @@ CREATE INDEX content_gin_idx ON table USING GIN(tokenized_content);  -- Keyword 
 
 ## Usage
 
-To use PGVector in your Llama Stack project, follow these steps:
+To use PGVector in your ogx project, follow these steps:
 
 1. Install the necessary dependencies.
-2. Configure your Llama Stack project to use pgvector. (e.g. remote::pgvector).
+2. Configure your ogx project to use pgvector. (e.g. remote::pgvector).
 3. Start storing and querying vectors.
 
 ## This is an example how you can set up your environment for using PGVector

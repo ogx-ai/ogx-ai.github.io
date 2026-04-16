@@ -10,17 +10,17 @@ llama-stack-client
 Usage: llama-stack-client [OPTIONS] COMMAND [ARGS]...
 
   Welcome to the llama-stack-client CLI - a command-line interface for
-  interacting with Llama Stack
+  interacting with ogx
 
 Options:
   --version        Show the version and exit.
-  --endpoint TEXT  Llama Stack distribution endpoint
-  --api-key TEXT   Llama Stack distribution API key
+  --endpoint TEXT  ogx distribution endpoint
+  --api-key TEXT   ogx distribution API key
   --config TEXT    Path to config file
   --help           Show this message and exit.
 
 Commands:
-  configure          Configure Llama Stack Client CLI.
+  configure          Configure ogx Client CLI.
   datasets           Manage datasets.
   eval               Run evaluation tasks.
   eval_tasks         Manage evaluation tasks.
@@ -36,17 +36,17 @@ Commands:
 ```
 
 ### `llama-stack-client configure`
-Configure Llama Stack Client CLI.
+Configure ogx Client CLI.
 ```bash
 llama-stack-client configure
-> Enter the host name of the Llama Stack distribution server: localhost
-> Enter the port number of the Llama Stack distribution server: 8321
-Done! You can now use the Llama Stack Client CLI with endpoint http://localhost:8321
+> Enter the host name of the ogx distribution server: localhost
+> Enter the port number of the ogx distribution server: 8321
+Done! You can now use the ogx Client CLI with endpoint http://localhost:8321
 ```
 
 Optional arguments:
-- `--endpoint`: Llama Stack distribution endpoint
-- `--api-key`: Llama Stack distribution API key
+- `--endpoint`: ogx distribution endpoint
+- `--api-key`: ogx distribution API key
 
 
 

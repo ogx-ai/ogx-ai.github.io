@@ -1,10 +1,10 @@
 # Post-Training
 
-Post-training in Llama Stack allows you to fine-tune models using various providers and frameworks. This section covers all available post-training providers and how to use them effectively.
+Post-training in ogx allows you to fine-tune models using various providers and frameworks. This section covers all available post-training providers and how to use them effectively.
 
 ## Overview
 
-Llama Stack provides multiple post-training providers:
+ogx provides multiple post-training providers:
 
 - **HuggingFace SFTTrainer** (`inline::huggingface`) - Fine-tuning using HuggingFace ecosystem
 - **TorchTune** (`inline::torchtune`) - Fine-tuning using Meta's TorchTune framework
@@ -12,12 +12,12 @@ Llama Stack provides multiple post-training providers:
 
 ## HuggingFace SFTTrainer
 
-[HuggingFace SFTTrainer](https://huggingface.co/docs/trl/en/sft_trainer) is an inline post training provider for Llama Stack. It allows you to run supervised fine tuning on a variety of models using many datasets.
+[HuggingFace SFTTrainer](https://huggingface.co/docs/trl/en/sft_trainer) is an inline post training provider for ogx. It allows you to run supervised fine tuning on a variety of models using many datasets.
 
 ### Features
 
 - Simple access through the post_training API
-- Fully integrated with Llama Stack
+- Fully integrated with ogx
 - GPU support, CPU support, and MPS support (MacOS Metal Performance Shaders)
 
 ### Configuration
@@ -144,12 +144,12 @@ print(client.post_training.job.artifacts(job_uuid=job_uuid))
 
 ## TorchTune
 
-[TorchTune](https://github.com/pytorch/torchtune) is an inline post training provider for Llama Stack. It provides a simple and efficient way to fine-tune language models using PyTorch.
+[TorchTune](https://github.com/pytorch/torchtune) is an inline post training provider for ogx. It provides a simple and efficient way to fine-tune language models using PyTorch.
 
 ### Features
 
 - Simple access through the post_training API
-- Fully integrated with Llama Stack
+- Fully integrated with ogx
 - GPU support and single device capabilities
 - Support for LoRA
 

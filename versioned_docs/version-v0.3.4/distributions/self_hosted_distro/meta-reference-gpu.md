@@ -31,7 +31,7 @@ Note that you need access to nvidia GPUs to run this distribution. This distribu
 
 The following environment variables can be configured:
 
-- `LLAMA_STACK_PORT`: Port for the Llama Stack distribution server (default: `8321`)
+- `LLAMA_STACK_PORT`: Port for the ogx distribution server (default: `8321`)
 - `INFERENCE_MODEL`: Inference model loaded into the Meta Reference server (default: `meta-llama/Llama-3.2-3B-Instruct`)
 - `INFERENCE_CHECKPOINT_DIR`: Directory containing the Meta Reference model checkpoint (default: `null`)
 - `SAFETY_MODEL`: Name of the safety (Llama-Guard) model to use (default: `meta-llama/Llama-Guard-3-1B`)
@@ -64,7 +64,7 @@ docker run \
   --port $LLAMA_STACK_PORT
 ```
 
-If you are using Llama Stack Safety / Shield APIs, use:
+If you are using ogx Safety / Shield APIs, use:
 
 ```bash
 docker run \
@@ -81,7 +81,7 @@ docker run \
 
 ### Via venv
 
-Make sure you have the Llama Stack CLI available.
+Make sure you have the ogx CLI available.
 
 ```bash
 llama stack list-deps meta-reference-gpu | xargs -L1 uv pip install
@@ -90,7 +90,7 @@ llama stack run distributions/meta-reference-gpu/run.yaml \
   --port 8321
 ```
 
-If you are using Llama Stack Safety / Shield APIs, use:
+If you are using ogx Safety / Shield APIs, use:
 
 ```bash
 INFERENCE_MODEL=meta-llama/Llama-3.2-3B-Instruct \

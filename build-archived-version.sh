@@ -39,7 +39,7 @@ if [ -n "$LLAMA_STACK_DIR" ] && [ -d "$LLAMA_STACK_DIR" ]; then
   git checkout "$VERSION" 2>/dev/null || git checkout "tags/$VERSION"
 else
   echo "--- Cloning from GitHub ---"
-  git clone --depth 1 --branch "$VERSION" https://github.com/llamastack/llama-stack.git "$TEMP_DIR/llama-stack"
+  git clone --depth 1 --branch "$VERSION" https://github.com/ogx-ai/llama-stack.git "$TEMP_DIR/llama-stack"
 fi
 
 cd "$BUILD_DIR"
@@ -86,7 +86,7 @@ config = config.replace(
 const bannerEntry = `
     announcementBar: {
       id: 'archived_version',
-      content: 'This is documentation for <b>${version}</b>. For the latest version, visit <a href="https://llamastack.github.io/">the main site</a>.',
+      content: 'This is documentation for <b>${version}</b>. For the latest version, visit <a href="https://ogx-ai.github.io/">the main site</a>.',
       backgroundColor: '#2b3137',
       textColor: '#ffffff',
       isCloseable: false,

@@ -104,7 +104,7 @@ jobs:
         echo "✅ Created empty versions.json (archived versions are static HTML, not Docusaurus versions)"
 
         # Fix GitHub org to match this repo's owner
-        sed -i "s|https://github.com/llamastack/llama-stack|https://github.com/${{ github.repository_owner }}/llama-stack|g" docusaurus.config.ts
+        sed -i "s|https://github.com/ogx-ai/llama-stack|https://github.com/${{ github.repository_owner }}/llama-stack|g" docusaurus.config.ts
 
         # Restrict blog to top-level .md/.mdx files only (exclude subdirectory files)
         # Docusaurus defaults to '**/*.{md,mdx}' which picks up non-blog .md files from subfolders

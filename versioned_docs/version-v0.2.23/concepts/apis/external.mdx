@@ -1,19 +1,19 @@
 ---
 title: External APIs
-description: Understanding external APIs in Llama Stack
+description: Understanding external APIs in ogx
 sidebar_label: External APIs
 sidebar_position: 3
 ---
 # External APIs
 
-Llama Stack supports external APIs that live outside of the main codebase. This allows you to:
+ogx supports external APIs that live outside of the main codebase. This allows you to:
 - Create and maintain your own APIs independently
 - Share APIs with others without contributing to the main codebase
-- Keep API-specific code separate from the core Llama Stack code
+- Keep API-specific code separate from the core ogx code
 
 ## Configuration
 
-To enable external APIs, you need to configure the `external_apis_dir` in your Llama Stack configuration. This directory should contain your external API specifications:
+To enable external APIs, you need to configure the `external_apis_dir` in your ogx configuration. This directory should contain your external API specifications:
 
 ```yaml
 external_apis_dir: ~/.llama/apis.d/
@@ -115,7 +115,7 @@ uv init
 [project]
 name = "llama-stack-api-weather"
 version = "0.1.0"
-description = "Weather API for Llama Stack"
+description = "Weather API for ogx"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = ["llama-stack", "pydantic"]
@@ -138,7 +138,7 @@ touch src/llama_stack_api_weather/api.py
 
 ```python
 # llama-stack-api-weather/src/llama_stack_api_weather/__init__.py
-"""Weather API for Llama Stack."""
+"""Weather API for ogx."""
 
 from .api import WeatherAPI, available_providers
 
@@ -206,7 +206,7 @@ protocol: WeatherProvider
 uv pip install -e .
 ```
 
-7. Configure Llama Stack to use external APIs:
+7. Configure ogx to use external APIs:
 
 ```yaml
 version: "2"
@@ -235,7 +235,7 @@ uv init
 [project]
 name = "llama-stack-provider-kaze"
 version = "0.1.0"
-description = "Kaze weather provider for Llama Stack"
+description = "Kaze weather provider for ogx"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = ["llama-stack", "pydantic", "aiohttp"]
@@ -263,7 +263,7 @@ Initialization function:
 
 ```python
 # llama-stack-provider-kaze/src/llama_stack_provider_kaze/__init__.py
-"""Kaze weather provider for Llama Stack."""
+"""Kaze weather provider for ogx."""
 
 from .config import KazeProviderConfig
 from .kaze import WeatherKazeAdapter
@@ -339,7 +339,7 @@ optional_api_dependencies: []
 uv pip install -e .
 ```
 
-7. Configure Llama Stack to use the provider:
+7. Configure ogx to use the provider:
 
 ```yaml
 # ~/.llama/run-byoa.yaml
@@ -375,7 +375,7 @@ curl -sSf http://127.0.0.1:8321/v1/weather/locations
 
 1. **Package Naming**: Use a clear and descriptive name for your API package.
 
-2. **Version Management**: Keep your API package versioned and compatible with the Llama Stack version you're using.
+2. **Version Management**: Keep your API package versioned and compatible with the ogx version you're using.
 
 3. **Dependencies**: Only include the minimum required dependencies in your API package.
 
@@ -385,7 +385,7 @@ curl -sSf http://127.0.0.1:8321/v1/weather/locations
    - API endpoints and usage
    - Any limitations or known issues
 
-5. **Testing**: Include tests in your API package to ensure it works correctly with Llama Stack.
+5. **Testing**: Include tests in your API package to ensure it works correctly with ogx.
 
 ## Troubleshooting
 
@@ -394,5 +394,5 @@ If your external API isn't being loaded:
 1. Check that the `external_apis_dir` path is correct and accessible.
 2. Verify that the YAML files are properly formatted.
 3. Ensure all required Python packages are installed.
-4. Check the Llama Stack server logs for any error messages - turn on debug logging to get more information using `LLAMA_STACK_LOGGING=all=debug`.
+4. Check the ogx server logs for any error messages - turn on debug logging to get more information using `LLAMA_STACK_LOGGING=all=debug`.
 5. Verify that the API package is installed in your Python environment.

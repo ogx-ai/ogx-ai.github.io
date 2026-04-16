@@ -33,7 +33,7 @@ if [ -n "$LLAMA_STACK_DIR" ] && [ -d "$LLAMA_STACK_DIR" ]; then
   git checkout "$BRANCH"
 else
   echo "--- Cloning from GitHub ---"
-  git clone --depth 1 --branch "$BRANCH" https://github.com/llamastack/llama-stack.git "$TEMP_DIR/llama-stack"
+  git clone --depth 1 --branch "$BRANCH" https://github.com/ogx-ai/llama-stack.git "$TEMP_DIR/llama-stack"
 fi
 
 cd "$BUILD_DIR"
@@ -59,9 +59,9 @@ let config = fs.readFileSync('docusaurus.config.ts', 'utf8');
 
 
 // Fix GitHub org to match this repo's owner
-const owner = process.env.REPO_OWNER || 'llamastack';
+const owner = process.env.REPO_OWNER || 'ogx-ai';
 config = config.replace(
-  /https:\/\/github\.com\/llamastack\/llama-stack/g,
+  /https:\/\/github\.com\/ogx-ai\/llama-stack/g,
   `https://github.com/${owner}/llama-stack`
 );
 

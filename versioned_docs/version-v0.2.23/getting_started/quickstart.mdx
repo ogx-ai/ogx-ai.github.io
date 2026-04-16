@@ -5,12 +5,12 @@ sidebar_position: 1
 title: Quickstart
 ---
 
-Get started with Llama Stack in minutes!
+Get started with ogx in minutes!
 
-Llama Stack is a stateful service with REST APIs to support the seamless transition of AI applications across different
+ogx is a stateful service with REST APIs to support the seamless transition of AI applications across different
 environments. You can build and test using a local server first and deploy to a hosted endpoint for production.
 
-In this guide, we'll walk through how to build a RAG application locally using Llama Stack with [Ollama](https://ollama.com/)
+In this guide, we'll walk through how to build a RAG application locally using ogx with [Ollama](https://ollama.com/)
 as the inference [provider](/docs/providers/inference) for a Llama Model.
 
 **💡 Notebook Version:** You can also follow this quickstart guide in a Jupyter notebook format: [quick_start.ipynb](https://github.com/meta-llama/llama-stack/blob/main/docs/quick_start.ipynb)
@@ -22,9 +22,9 @@ as the inference [provider](/docs/providers/inference) for a Llama Model.
 ollama run llama3.2:3b --keepalive 60m
 ```
 
-#### Step 2: Run the Llama Stack server
+#### Step 2: Run the ogx server
 
-We will use `uv` to run the Llama Stack server.
+We will use `uv` to run the ogx server.
 ```bash
 OLLAMA_URL=http://localhost:11434 \
   uv run --with llama-stack llama stack build --distro starter --image-type venv --run
@@ -129,7 +129,7 @@ To further clarify, I would suggest that doing great work involves:
 
 Ultimately, great work is about making a meaningful contribution and leaving a lasting impression.
 ```
-Congratulations! You've successfully built your first RAG application using Llama Stack! 🎉🥳
+Congratulations! You've successfully built your first RAG application using ogx! 🎉🥳
 
 :::tip HuggingFace access
 
@@ -139,11 +139,11 @@ If you are getting a **401 Client Error** from HuggingFace for the **all-MiniLM-
 
 ### Next Steps
 
-Now you're ready to dive deeper into Llama Stack!
+Now you're ready to dive deeper into ogx!
 - Explore the [Detailed Tutorial](./detailed_tutorial).
 - Try the [Getting Started Notebook](https://github.com/meta-llama/llama-stack/blob/main/docs/getting_started.ipynb).
 - Browse more [Notebooks on GitHub](https://github.com/meta-llama/llama-stack/tree/main/docs/notebooks).
-- Learn about Llama Stack [Concepts](/docs/concepts).
-- Discover how to [Build Llama Stacks](/docs/distributions).
+- Learn about ogx [Concepts](/docs/concepts).
+- Discover how to [Build ogxs](/docs/distributions).
 - Refer to our [References](/docs/references) for details on the Llama CLI and Python SDK.
 - Check out the [llama-stack-apps](https://github.com/meta-llama/llama-stack-apps/tree/main/examples) repository for example applications and tutorials.

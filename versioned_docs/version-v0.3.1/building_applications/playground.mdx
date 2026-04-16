@@ -1,6 +1,6 @@
 ---
-title: Llama Stack Playground
-description: Interactive interface to explore and experiment with Llama Stack capabilities
+title: ogx Playground
+description: Interactive interface to explore and experiment with ogx capabilities
 sidebar_label: Playground
 sidebar_position: 10
 ---
@@ -8,22 +8,22 @@ sidebar_position: 10
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Llama Stack Playground
+# ogx Playground
 
 :::note[Experimental Feature]
-The Llama Stack Playground is currently experimental and subject to change. We welcome feedback and contributions to help improve it.
+The ogx Playground is currently experimental and subject to change. We welcome feedback and contributions to help improve it.
 :::
 
-The Llama Stack Playground is a simple interface that aims to:
-- **Showcase capabilities and concepts** of Llama Stack in an interactive environment
+The ogx Playground is a simple interface that aims to:
+- **Showcase capabilities and concepts** of ogx in an interactive environment
 - **Demo end-to-end application code** to help users get started building their own applications
-- **Provide a UI** to help users inspect and understand Llama Stack API providers and resources
+- **Provide a UI** to help users inspect and understand ogx API providers and resources
 
 ## Key Features
 
 ### Interactive Playground Pages
 
-The playground provides interactive pages for users to explore Llama Stack API capabilities:
+The playground provides interactive pages for users to explore ogx API capabilities:
 
 #### Chatbot Interface
 
@@ -54,7 +54,7 @@ The playground provides interactive pages for users to explore Llama Stack API c
 **Document-Aware Conversations**
 - Upload documents to create memory banks
 - Chat with a RAG-enabled agent that can query your documents
-- Uses Llama Stack's `/agents` API to create and manage RAG sessions
+- Uses ogx's `/agents` API to create and manage RAG sessions
 - Ideal for exploring knowledge-enhanced AI applications
 
 </TabItem>
@@ -80,7 +80,7 @@ The playground provides interactive pages for users to explore Llama Stack API c
 **Custom Dataset Evaluation**
 - Upload your own evaluation datasets
 - Run evaluations using available scoring functions
-- Uses Llama Stack's `/scoring` API for flexible evaluation workflows
+- Uses ogx's `/scoring` API for flexible evaluation workflows
 - Great for testing application performance on custom metrics
 
 </TabItem>
@@ -100,7 +100,7 @@ The playground provides interactive pages for users to explore Llama Stack API c
 
 **Pre-registered Evaluation Tasks**
 - Evaluate models or agents on pre-defined tasks
-- Uses Llama Stack's `/eval` API for comprehensive evaluation
+- Uses ogx's `/eval` API for comprehensive evaluation
 - Combines datasets and scoring functions for standardized testing
 
 **Setup Requirements:**
@@ -144,7 +144,7 @@ llama-stack-client benchmarks register \
 <TabItem value="providers" label="API Providers">
 
 **Provider Management**
-- Inspect available Llama Stack API providers
+- Inspect available ogx API providers
 - View provider configurations and capabilities
 - Uses the `/providers` API for real-time provider information
 - Essential for understanding your deployment's capabilities
@@ -153,7 +153,7 @@ llama-stack-client benchmarks register \
 <TabItem value="resources" label="API Resources">
 
 **Resource Exploration**
-- Inspect Llama Stack API resources including:
+- Inspect ogx API resources including:
   - **Models**: Available language models
   - **Datasets**: Registered evaluation datasets
   - **Memory Banks**: Vector databases and knowledge stores
@@ -172,7 +172,7 @@ llama-stack-client benchmarks register \
 <Tabs>
 <TabItem value="setup" label="Setup">
 
-**1. Start the Llama Stack API Server**
+**1. Start the ogx API Server**
 
 ```bash
 llama stack list-deps together | xargs -L1 uv pip install
@@ -202,7 +202,7 @@ uv run --with ".[ui]" streamlit run llama_stack.core/ui/app.py
 
 ### Available Distributions
 
-The playground works with any Llama Stack distribution. Popular options include:
+The playground works with any ogx distribution. Popular options include:
 
 <Tabs>
 <TabItem value="together" label="Together AI">
@@ -249,7 +249,7 @@ llama stack run meta-reference
 ## Use Cases & Examples
 
 ### Educational Use Cases
-- **Learning Llama Stack**: Hands-on exploration of API capabilities
+- **Learning ogx**: Hands-on exploration of API capabilities
 - **Prompt Engineering**: Interactive testing of different prompting strategies
 - **RAG Experimentation**: Understanding how document retrieval affects responses
 - **Evaluation Understanding**: See how different metrics evaluate model performance
@@ -258,7 +258,7 @@ llama stack run meta-reference
 - **Prototype Testing**: Quick validation of application concepts
 - **API Exploration**: Understanding available endpoints and parameters
 - **Integration Planning**: Seeing how different components work together
-- **Demo Creation**: Showcasing Llama Stack capabilities to stakeholders
+- **Demo Creation**: Showcasing ogx capabilities to stakeholders
 
 ### Research Use Cases
 - **Model Comparison**: Side-by-side testing of different models
@@ -291,7 +291,7 @@ llama stack run meta-reference
 ## Related Resources
 
 - **[Getting Started Guide](../getting_started/quickstart)** - Complete setup and introduction
-- **[Core Concepts](/docs/concepts)** - Understanding Llama Stack fundamentals
+- **[Core Concepts](/docs/concepts)** - Understanding ogx fundamentals
 - **[Agents](./agent)** - Building intelligent agents
 - **[RAG (Retrieval Augmented Generation)](./rag)** - Knowledge-enhanced applications
 - **[Evaluations](./evals)** - Comprehensive evaluation framework

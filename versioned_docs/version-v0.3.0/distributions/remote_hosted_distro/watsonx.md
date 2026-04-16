@@ -31,7 +31,7 @@ The `llamastack/distribution-watsonx` distribution consists of the following pro
 
 The following environment variables can be configured:
 
-- `LLAMASTACK_PORT`: Port for the Llama Stack distribution server (default: `5001`)
+- `LLAMASTACK_PORT`: Port for the ogx distribution server (default: `5001`)
 - `WATSONX_API_KEY`: watsonx API Key (default: ``)
 - `WATSONX_PROJECT_ID`: watsonx Project ID (default: ``)
 
@@ -55,7 +55,7 @@ The following models are available by default:
 Make sure you have access to a watsonx API Key. You can get one by referring [watsonx.ai](https://www.ibm.com/docs/en/masv-and-l/maximo-manage/continuous-delivery?topic=setup-create-watsonx-api-key).
 
 
-## Running Llama Stack with watsonx
+## Running ogx with watsonx
 
 You can do this via venv or Docker which has a pre-built image.
 

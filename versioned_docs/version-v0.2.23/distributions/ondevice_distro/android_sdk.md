@@ -1,21 +1,21 @@
-# Llama Stack Client Kotlin API Library
+# ogx Client Kotlin API Library
 
-We are excited to share a guide for a Kotlin Library that brings front the benefits of Llama Stack to your Android device. This library is a set of SDKs that provide a simple and effective way to integrate AI capabilities into your Android app whether it is local (on-device) or remote inference.
+We are excited to share a guide for a Kotlin Library that brings front the benefits of ogx to your Android device. This library is a set of SDKs that provide a simple and effective way to integrate AI capabilities into your Android app whether it is local (on-device) or remote inference.
 
 Features:
 - Local Inferencing: Run Llama models purely on-device with real-time processing. We currently utilize ExecuTorch as the local inference distributor and may support others in the future.
     - [ExecuTorch](https://github.com/pytorch/executorch/tree/main) is a complete end-to-end solution within the PyTorch framework for inferencing capabilities on-device with high portability and seamless performance.
 - Remote Inferencing: Perform inferencing tasks remotely with Llama models hosted on a remote connection (or serverless localhost).
-- Simple Integration: With easy-to-use APIs, a developer can quickly integrate Llama Stack in their Android app. The difference with local vs remote inferencing is also minimal.
+- Simple Integration: With easy-to-use APIs, a developer can quickly integrate ogx in their Android app. The difference with local vs remote inferencing is also minimal.
 
 Latest Release Notes: [link](https://github.com/meta-llama/llama-stack-client-kotlin/tree/latest-release)
 
 *Tagged releases are stable versions of the project. While we strive to maintain a stable main branch, it's not guaranteed to be free of bugs or issues.*
 
 ## Android Demo App
-Check out our demo app to see how to integrate Llama Stack into your Android app: [Android Demo App](https://github.com/meta-llama/llama-stack-client-kotlin/tree/latest-release/examples/android_app)
+Check out our demo app to see how to integrate ogx into your Android app: [Android Demo App](https://github.com/meta-llama/llama-stack-client-kotlin/tree/latest-release/examples/android_app)
 
-The key files in the app are `ExampleLlamaStackLocalInference.kt`, `ExampleLlamaStackRemoteInference.kts`, and `MainActivity.java`. With encompassed business logic, the app shows how to use Llama Stack for both the environments.
+The key files in the app are `ExampleLlamaStackLocalInference.kt`, `ExampleLlamaStackRemoteInference.kts`, and `MainActivity.java`. With encompassed business logic, the app shows how to use ogx for both the environments.
 
 ## Quick Start
 
@@ -50,11 +50,11 @@ dependencies {
 
 See other dependencies for the local RAG in Android app [README](https://github.com/meta-llama/llama-stack-client-kotlin/tree/latest-release/examples/android_app#quick-start).
 
-## Llama Stack APIs in Your Android App
-Breaking down the demo app, this section will show the core pieces that are used to initialize and run inference with Llama Stack using the Kotlin library.
+## ogx APIs in Your Android App
+Breaking down the demo app, this section will show the core pieces that are used to initialize and run inference with ogx using the Kotlin library.
 
 ### Setup Remote Inferencing
-Start a Llama Stack server on localhost. Here is an example of how you can do this using the firework.ai distribution:
+Start a ogx server on localhost. Here is an example of how you can do this using the firework.ai distribution:
 ```
 uv venv starter --python 3.12
 source starter/bin/activate  # On Windows: starter\Scripts\activate
@@ -64,7 +64,7 @@ export FIREWORKS_API_KEY=<SOME_KEY>
 llama stack run starter --port 5050
 ```
 
-Ensure the Llama Stack server version is the same as the Kotlin SDK Library for maximum compatibility.
+Ensure the ogx server version is the same as the Kotlin SDK Library for maximum compatibility.
 
 Other inference providers: [Table](/docs/)
 
@@ -139,13 +139,13 @@ Android demo app for more details: [Custom Tool Calling](https://github.com/meta
 
 ## Advanced Users
 
-The purpose of this section is to share more details with users that would like to dive deeper into the Llama Stack Kotlin Library. Whether you’re interested in contributing to the open source library, debugging or just want to learn more, this section is for you!
+The purpose of this section is to share more details with users that would like to dive deeper into the ogx Kotlin Library. Whether you’re interested in contributing to the open source library, debugging or just want to learn more, this section is for you!
 
 ### Prerequisite
 
 You must complete the following steps:
 1. Clone the repo (`git clone https://github.com/meta-llama/llama-stack-client-kotlin.git -b latest-release`)
-2. Port the appropriate ExecuTorch libraries over into your Llama Stack Kotlin library environment.
+2. Port the appropriate ExecuTorch libraries over into your ogx Kotlin library environment.
 ```
 cd llama-stack-client-kotlin-client-local
 sh download-prebuilt-et-lib.sh --unzip
@@ -255,7 +255,7 @@ We're aware of the following issues and are working to resolve them:
 3. Changing to another model is a work in progress for local and remote platforms
 
 ## Thanks
-We'd like to extend our thanks to the ExecuTorch team for providing their support as we integrated ExecuTorch as one of the local inference distributors for Llama Stack. Checkout [ExecuTorch Github repo](https://github.com/pytorch/executorch/tree/main) for more information.
+We'd like to extend our thanks to the ExecuTorch team for providing their support as we integrated ExecuTorch as one of the local inference distributors for ogx. Checkout [ExecuTorch Github repo](https://github.com/pytorch/executorch/tree/main) for more information.
 
 ---
 

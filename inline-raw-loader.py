@@ -124,18 +124,18 @@ def inline_raw_loader(versioned_dir, repo_root):
             # Fix relative links that point to repo files
             imported_content = imported_content.replace(
                 "](tests/README.md)",
-                "](https://github.com/llamastack/llama-stack/blob/main/tests/README.md)",
+                "](https://github.com/ogx-ai/llama-stack/blob/main/tests/README.md)",
             )
             imported_content = imported_content.replace(
                 "](./RELEASE_PROCESS.md)",
-                "](https://github.com/llamastack/llama-stack/blob/main/RELEASE_PROCESS.md)",
+                "](https://github.com/ogx-ai/llama-stack/blob/main/RELEASE_PROCESS.md)",
             )
             imported_content = imported_content.replace(
-                "](README.md)", "](https://github.com/llamastack/llama-stack#community)"
+                "](README.md)", "](https://github.com/ogx-ai/llama-stack#community)"
             )
             imported_content = imported_content.replace(
                 "](llama_stack/",
-                "](https://github.com/llamastack/llama-stack/blob/main/llama_stack/",
+                "](https://github.com/ogx-ai/llama-stack/blob/main/llama_stack/",
             )
 
             # Escape MDX-incompatible syntax in imported content

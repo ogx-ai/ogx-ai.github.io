@@ -11,7 +11,7 @@ orphan: true
 self
 ```
 
-The `llamastack/distribution-starter` distribution is a comprehensive, multi-provider distribution that includes most of the available inference providers in Llama Stack. It's designed to be a one-stop solution for developers who want to experiment with different AI providers without having to configure each one individually.
+The `llamastack/distribution-starter` distribution is a comprehensive, multi-provider distribution that includes most of the available inference providers in ogx. It's designed to be a one-stop solution for developers who want to experiment with different AI providers without having to configure each one individually.
 
 ## Provider Composition
 
@@ -73,7 +73,7 @@ The starter distribution includes a comprehensive set of vector IO providers:
 The following environment variables can be configured:
 
 ### Server Configuration
-- `LLAMA_STACK_PORT`: Port for the Llama Stack distribution server (default: `8321`)
+- `LLAMA_STACK_PORT`: Port for the ogx distribution server (default: `8321`)
 
 ### API Keys for Hosted Providers
 - `OPENAI_API_KEY`: OpenAI API key
@@ -233,7 +233,7 @@ inference chat-completion \
 # First, make sure Ollama is running and you have a model
 ollama run llama3.2:3b
 
-# Then use it through Llama Stack
+# Then use it through ogx
 export OLLAMA_INFERENCE_MODEL=llama3.2:3b
 llama-stack-client --endpoint http://localhost:8321 \
 inference chat-completion \
