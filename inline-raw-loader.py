@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Inline !!raw-loader! imports in versioned docs.
 
-Usage: python3 inline-raw-loader.py <versioned_docs_dir> <llama-stack-repo-root>
+Usage: python3 inline-raw-loader.py <versioned_docs_dir> <ogx-repo-root>
 
-Example: python3 inline-raw-loader.py versioned_docs/version-v0.4.1 /tmp/llama-stack
+Example: python3 inline-raw-loader.py versioned_docs/version-v0.4.1 /tmp/ogx
 """
 
 import re
@@ -124,18 +124,18 @@ def inline_raw_loader(versioned_dir, repo_root):
             # Fix relative links that point to repo files
             imported_content = imported_content.replace(
                 "](tests/README.md)",
-                "](https://github.com/ogx-ai/llama-stack/blob/main/tests/README.md)",
+                "](https://github.com/ogx-ai/ogx/blob/main/tests/README.md)",
             )
             imported_content = imported_content.replace(
                 "](./RELEASE_PROCESS.md)",
-                "](https://github.com/ogx-ai/llama-stack/blob/main/RELEASE_PROCESS.md)",
+                "](https://github.com/ogx-ai/ogx/blob/main/RELEASE_PROCESS.md)",
             )
             imported_content = imported_content.replace(
-                "](README.md)", "](https://github.com/ogx-ai/llama-stack#community)"
+                "](README.md)", "](https://github.com/ogx-ai/ogx#community)"
             )
             imported_content = imported_content.replace(
                 "](llama_stack/",
-                "](https://github.com/ogx-ai/llama-stack/blob/main/llama_stack/",
+                "](https://github.com/ogx-ai/ogx/blob/main/llama_stack/",
             )
 
             # Escape MDX-incompatible syntax in imported content

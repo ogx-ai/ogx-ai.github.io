@@ -1,9 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-# build-latest.sh - Build the latest Docusaurus docs from llama-stack
+# build-latest.sh - Build the latest Docusaurus docs from ogx
 #
-# Usage: ./build-latest.sh [--llama-stack-dir <path>] [--branch <branch>] [--output-dir <path>]
+# Usage: ./build-latest.sh [--ogx-dir <path>] [--branch <branch>] [--output-dir <path>]
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 LLAMA_STACK_DIR=""
@@ -12,7 +12,7 @@ OUTPUT_DIR="$REPO_DIR/docs"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --llama-stack-dir) LLAMA_STACK_DIR="$2"; shift 2 ;;
+    --ogx-dir) LLAMA_STACK_DIR="$2"; shift 2 ;;
     --branch) BRANCH="$2"; shift 2 ;;
     --output-dir) OUTPUT_DIR="$2"; shift 2 ;;
     *) echo "Unknown option: $1"; exit 1 ;;
@@ -20,20 +20,20 @@ while [[ $# -gt 0 ]]; do
 done
 
 TEMP_DIR=$(mktemp -d)
-BUILD_DIR="$TEMP_DIR/llama-stack/docs"
+BUILD_DIR="$TEMP_DIR/ogx/docs"
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
 echo "=== Building latest docs (branch: $BRANCH) ==="
 
-# Step 1: Get llama-stack source
+# Step 1: Get ogx source
 if [ -n "$LLAMA_STACK_DIR" ] && [ -d "$LLAMA_STACK_DIR" ]; then
   echo "--- Cloning from local repo (branch: $BRANCH) ---"
-  git clone --local --no-checkout "$LLAMA_STACK_DIR" "$TEMP_DIR/llama-stack"
-  cd "$TEMP_DIR/llama-stack"
+  git clone --local --no-checkout "$LLAMA_STACK_DIR" "$TEMP_DIR/ogx"
+  cd "$TEMP_DIR/ogx"
   git checkout "$BRANCH"
 else
   echo "--- Cloning from GitHub ---"
-  git clone --depth 1 --branch "$BRANCH" https://github.com/ogx-ai/llama-stack.git "$TEMP_DIR/llama-stack"
+  git clone --depth 1 --branch "$BRANCH" https://github.com/ogx-ai/ogx.git "$TEMP_DIR/ogx"
 fi
 
 cd "$BUILD_DIR"
@@ -44,9 +44,9 @@ npm ci 2>&1 | tail -5
 
 # Step 3: Generate API docs
 echo "--- Generating API docs ---"
-[ -f "static/llama-stack-spec.yaml" ] && npm run gen-api-docs stable 2>&1 | grep -E "^Successfully" || true
-[ -f "static/experimental-llama-stack-spec.yaml" ] && npm run gen-api-docs experimental 2>&1 | grep -E "^Successfully" || true
-[ -f "static/deprecated-llama-stack-spec.yaml" ] && npm run gen-api-docs deprecated 2>&1 | grep -E "^Successfully" || true
+[ -f "static/ogx-spec.yaml" ] && npm run gen-api-docs stable 2>&1 | grep -E "^Successfully" || true
+[ -f "static/experimental-ogx-spec.yaml" ] && npm run gen-api-docs experimental 2>&1 | grep -E "^Successfully" || true
+[ -f "static/deprecated-ogx-spec.yaml" ] && npm run gen-api-docs deprecated 2>&1 | grep -E "^Successfully" || true
 
 # Step 4: Set up versioning (archived versions dropdown)
 echo "--- Setting up versioning ---"
@@ -61,8 +61,8 @@ let config = fs.readFileSync('docusaurus.config.ts', 'utf8');
 // Fix GitHub org to match this repo's owner
 const owner = process.env.REPO_OWNER || 'ogx-ai';
 config = config.replace(
-  /https:\/\/github\.com\/ogx-ai\/llama-stack/g,
-  `https://github.com/${owner}/llama-stack`
+  /https:\/\/github\.com\/ogx-ai\/ogx/g,
+  `https://github.com/${owner}/ogx`
 );
 
 fs.writeFileSync('docusaurus.config.ts', config);

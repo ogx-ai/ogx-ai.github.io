@@ -2,7 +2,7 @@
 
 DONOT MAKE CHANGES TO THIS REPOSITORY DIRECTLY
 
-This repository hosts the GitHub Pages documentation site generated from documentation in [ogx](https://github.com/ogx-ai/llama-stack).
+This repository hosts the GitHub Pages documentation site generated from documentation in [ogx](https://github.com/ogx-ai/ogx).
 
 🔗 **Live Documentation**: https://ogx-ai.github.io/
 
@@ -42,7 +42,7 @@ The `run-docusaurus-local.py` script simulates the GitHub Actions workflow local
 
 ## Contributing
 
-Documentation content should be contributed to the main [ogx repository](https://github.com/ogx-ai/llama-stack/tree/main/docs). This repository only hosts the built documentation.
+Documentation content should be contributed to the main [ogx repository](https://github.com/ogx-ai/ogx/tree/main/docs). This repository only hosts the built documentation.
 ## License
 
-See the [ogx repository](https://github.com/ogx-ai/llama-stack) for license information.
+See the [ogx repository](https://github.com/ogx-ai/ogx) for license information.

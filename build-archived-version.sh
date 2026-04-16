@@ -3,15 +3,15 @@ set -euo pipefail
 
 # build-archived-version.sh - Build a standalone static Docusaurus site for an archived version
 #
-# Usage: ./build-archived-version.sh <version-tag> [--llama-stack-dir <path>]
+# Usage: ./build-archived-version.sh <version-tag> [--ogx-dir <path>]
 #
 # Examples:
 #   ./build-archived-version.sh v0.5.0
-#   ./build-archived-version.sh v0.6.0 --llama-stack-dir /tmp/llama-stack
+#   ./build-archived-version.sh v0.6.0 --ogx-dir /tmp/ogx
 #
 # Output: docs/<version-tag>/ containing the full static site
 
-VERSION="${1:?Usage: $0 <version-tag> [--llama-stack-dir <path>]}"
+VERSION="${1:?Usage: $0 <version-tag> [--ogx-dir <path>]}"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Parse optional arguments
@@ -19,27 +19,27 @@ LLAMA_STACK_DIR=""
 shift
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --llama-stack-dir) LLAMA_STACK_DIR="$2"; shift 2 ;;
+    --ogx-dir) LLAMA_STACK_DIR="$2"; shift 2 ;;
     *) echo "Unknown option: $1"; exit 1 ;;
   esac
 done
 
 # Setup temp directory for the build
 TEMP_DIR=$(mktemp -d)
-BUILD_DIR="$TEMP_DIR/llama-stack/docs"
+BUILD_DIR="$TEMP_DIR/ogx/docs"
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
 echo "=== Building archived version $VERSION ==="
 
-# Step 1: Get llama-stack at the specified version
+# Step 1: Get ogx at the specified version
 if [ -n "$LLAMA_STACK_DIR" ] && [ -d "$LLAMA_STACK_DIR" ]; then
   echo "--- Cloning from local repo ---"
-  git clone --local --no-checkout "$LLAMA_STACK_DIR" "$TEMP_DIR/llama-stack"
-  cd "$TEMP_DIR/llama-stack"
+  git clone --local --no-checkout "$LLAMA_STACK_DIR" "$TEMP_DIR/ogx"
+  cd "$TEMP_DIR/ogx"
   git checkout "$VERSION" 2>/dev/null || git checkout "tags/$VERSION"
 else
   echo "--- Cloning from GitHub ---"
-  git clone --depth 1 --branch "$VERSION" https://github.com/ogx-ai/llama-stack.git "$TEMP_DIR/llama-stack"
+  git clone --depth 1 --branch "$VERSION" https://github.com/ogx-ai/ogx.git "$TEMP_DIR/ogx"
 fi
 
 cd "$BUILD_DIR"
@@ -51,21 +51,21 @@ npm ci 2>&1 | tail -5
 # Step 3: Generate API docs
 echo "--- Generating API docs ---"
 
-if [ -f "static/llama-stack-spec.yaml" ]; then
+if [ -f "static/ogx-spec.yaml" ]; then
   npm run gen-api-docs stable 2>&1 | grep -E "^Successfully" || true
 fi
 
-if [ -f "static/experimental-llama-stack-spec.yaml" ]; then
+if [ -f "static/experimental-ogx-spec.yaml" ]; then
   npm run gen-api-docs experimental 2>&1 | grep -E "^Successfully" || true
 fi
 
-if [ -f "static/deprecated-llama-stack-spec.yaml" ]; then
+if [ -f "static/deprecated-ogx-spec.yaml" ]; then
   npm run gen-api-docs deprecated 2>&1 | grep -E "^Successfully" || true
 fi
 
 # Step 4: Inline raw-loader imports
 echo "--- Inlining raw-loader imports ---"
-python3 "$REPO_DIR/inline-raw-loader.py" docs "$TEMP_DIR/llama-stack"
+python3 "$REPO_DIR/inline-raw-loader.py" docs "$TEMP_DIR/ogx"
 
 # Step 5: Patch config for standalone archived build
 echo "--- Patching config for baseUrl: /$VERSION/ ---"

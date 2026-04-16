@@ -19,8 +19,8 @@ on:
           - build-only
           - deploy-only
           - build-and-deploy
-      llama_stack_branch:
-        description: 'Branch of llama-stack to build from (default: main)'
+      ogx_branch:
+        description: 'Branch of ogx to build from (default: main)'
         required: false
         default: 'main'
         type: string
@@ -41,20 +41,20 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Clone llama-stack repository
+    - name: Clone ogx repository
       run: |
-        echo "📥 Cloning llama-stack repository..."
+        echo "📥 Cloning ogx repository..."
         TEMP_DIR=$(mktemp -d)
         echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
 
-        git clone https://github.com/${{ github.repository_owner }}/llama-stack.git "$TEMP_DIR/llama-stack"
-        cd "$TEMP_DIR/llama-stack"
+        git clone https://github.com/${{ github.repository_owner }}/ogx.git "$TEMP_DIR/ogx"
+        cd "$TEMP_DIR/ogx"
         git fetch --all --tags
 
         # Determine version to checkout
         VERSION="${{ github.event.inputs.version || 'latest' }}"
         if [ "$VERSION" = "latest" ] || [ -z "$VERSION" ]; then
-          LSBRANCH="${{ github.event.inputs.llama_stack_branch || 'main' }}"
+          LSBRANCH="${{ github.event.inputs.ogx_branch || 'main' }}"
           LSBRANCH="${LSBRANCH:-main}"
           git checkout "$LSBRANCH"
           echo "✅ Using branch: $LSBRANCH"
@@ -82,14 +82,14 @@ jobs:
       id: cache-npm
       with:
         path: ~/.npm
-        key: npm-${{ runner.os }}-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/package-lock.json') }}
+        key: npm-${{ runner.os }}-${{ hashFiles('${{ env.TEMP_DIR }}/ogx/docs/package-lock.json') }}
         restore-keys: |
           npm-${{ runner.os }}-
 
     - name: Install dependencies and setup versioning
       run: |
         echo "📦 Installing dependencies..."
-        cd "${{ env.TEMP_DIR }}/llama-stack/docs"
+        cd "${{ env.TEMP_DIR }}/ogx/docs"
         npm ci
         echo "✅ Dependencies installed"
 
@@ -104,7 +104,7 @@ jobs:
         echo "✅ Created empty versions.json (archived versions are static HTML, not Docusaurus versions)"
 
         # Fix GitHub org to match this repo's owner
-        sed -i "s|https://github.com/ogx-ai/llama-stack|https://github.com/${{ github.repository_owner }}/llama-stack|g" docusaurus.config.ts
+        sed -i "s|https://github.com/ogx-ai/ogx|https://github.com/${{ github.repository_owner }}/ogx|g" docusaurus.config.ts
 
         # Restrict blog to top-level .md/.mdx files only (exclude subdirectory files)
         # Docusaurus defaults to '**/*.{md,mdx}' which picks up non-blog .md files from subfolders
@@ -131,29 +131,29 @@ jobs:
       uses: actions/cache@v4
       id: cache-api-stable
       with:
-        path: ${{ env.TEMP_DIR }}/llama-stack/docs/docs/api
-        key: api-stable-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/static/llama-stack-spec.yaml') }}
+        path: ${{ env.TEMP_DIR }}/ogx/docs/docs/api
+        key: api-stable-${{ hashFiles('${{ env.TEMP_DIR }}/ogx/docs/static/ogx-spec.yaml') }}
         restore-keys: api-stable-
 
     - name: Cache experimental API docs
       uses: actions/cache@v4
       id: cache-api-experimental
       with:
-        path: ${{ env.TEMP_DIR }}/llama-stack/docs/docs/api-experimental
-        key: api-experimental-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/static/experimental-llama-stack-spec.yaml') }}
+        path: ${{ env.TEMP_DIR }}/ogx/docs/docs/api-experimental
+        key: api-experimental-${{ hashFiles('${{ env.TEMP_DIR }}/ogx/docs/static/experimental-ogx-spec.yaml') }}
         restore-keys: api-experimental-
 
     - name: Cache deprecated API docs
       uses: actions/cache@v4
       id: cache-api-deprecated
       with:
-        path: ${{ env.TEMP_DIR }}/llama-stack/docs/docs/api-deprecated
-        key: api-deprecated-${{ hashFiles('${{ env.TEMP_DIR }}/llama-stack/docs/static/deprecated-llama-stack-spec.yaml') }}
+        path: ${{ env.TEMP_DIR }}/ogx/docs/docs/api-deprecated
+        key: api-deprecated-${{ hashFiles('${{ env.TEMP_DIR }}/ogx/docs/static/deprecated-ogx-spec.yaml') }}
         restore-keys: api-deprecated-
 
     - name: Build documentation
       run: |
-        cd "${{ env.TEMP_DIR }}/llama-stack/docs"
+        cd "${{ env.TEMP_DIR }}/ogx/docs"
 
         # Generate API docs in parallel for better performance
         echo "🔄 Generating API docs in parallel..."
@@ -221,7 +221,7 @@ jobs:
           mkdir -p versioned_docs/resources
           if [ ! -f "versioned_docs/resources/prompt-format.png" ]; then
             echo "📥 Downloading missing prompt-format.png..."
-            curl -o versioned_docs/resources/prompt-format.png https://raw.githubusercontent.com/${{ github.repository_owner }}/llama-stack/main/docs/static/img/prompt-format.png
+            curl -o versioned_docs/resources/prompt-format.png https://raw.githubusercontent.com/${{ github.repository_owner }}/ogx/main/docs/static/img/prompt-format.png
             echo "✅ Downloaded prompt-format.png to versioned_docs/resources/"
           else
             echo "✅ prompt-format.png already exists in versioned_docs/resources/"
@@ -235,7 +235,7 @@ jobs:
     - name: Inline raw-loader imports in versioned docs
       if: env.BUILDING_LATEST != 'true'
       run: |
-        cd "${{ env.TEMP_DIR }}/llama-stack/docs"
+        cd "${{ env.TEMP_DIR }}/ogx/docs"
 
         echo "🔧 Inlining raw-loader imports in versioned docs..."
 
@@ -243,7 +243,7 @@ jobs:
           for version_dir in versioned_docs/version-*; do
             if [ -d "$version_dir" ]; then
               echo "  Processing $version_dir..."
-              python3 "${{ github.workspace }}/inline-raw-loader.py" "$version_dir" "${{ env.TEMP_DIR }}/llama-stack"
+              python3 "${{ github.workspace }}/inline-raw-loader.py" "$version_dir" "${{ env.TEMP_DIR }}/ogx"
             fi
           done
           echo "✅ Versioned docs raw-loader imports inlined"
@@ -253,11 +253,11 @@ jobs:
 
     - name: Build Docusaurus site
       run: |
-        cd "${{ env.TEMP_DIR }}/llama-stack/docs"
+        cd "${{ env.TEMP_DIR }}/ogx/docs"
 
         # Patch out duplicate version badges from OpenAPI MDX files
         echo "🔧 Patching out duplicate version badges..."
-        find . -name "llama-stack-specification.info.mdx" -type f -exec sed -i '/<span$/,/<\/span>$/d' {} \;
+        find . -name "ogx-specification.info.mdx" -type f -exec sed -i '/<span$/,/<\/span>$/d' {} \;
 
         echo "🏗️ Running Docusaurus build..."
         npm run build
@@ -275,7 +275,7 @@ jobs:
         find "$DOCS_DIR" -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.nojekyll' ! -name 'v[0-9]*' -exec rm -rf {} +
 
         # Copy Docusaurus build output
-        cp -r "${{ env.TEMP_DIR }}/llama-stack/docs/build/"* "$DOCS_DIR/"
+        cp -r "${{ env.TEMP_DIR }}/ogx/docs/build/"* "$DOCS_DIR/"
         cp "${{ github.workspace }}/versions.html" "$DOCS_DIR/versions.html"
 
         # Ensure .nojekyll exists
@@ -288,7 +288,7 @@ jobs:
       run: |
         echo "📋 Updating workspace versioning artifacts..."
 
-        BUILD_PATH="${{ env.TEMP_DIR }}/llama-stack/docs"
+        BUILD_PATH="${{ env.TEMP_DIR }}/ogx/docs"
 
         # Copy versioned docs and sidebars to workspace (for git commit)
         if [ -d "$BUILD_PATH/versioned_docs" ]; then
@@ -309,7 +309,7 @@ jobs:
       run: |
         echo "⚙️ Setting up versioning configuration files..."
 
-        BUILD_PATH="${{ env.TEMP_DIR }}/llama-stack/docs"
+        BUILD_PATH="${{ env.TEMP_DIR }}/ogx/docs"
 
         # Copy versioning files to deployment
         cp "$BUILD_PATH/versionsArchived.json" "${{ github.workspace }}/docs/"
