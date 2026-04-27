@@ -6,13 +6,13 @@ set -euo pipefail
 # Usage: ./build-latest.sh [--ogx-dir <path>] [--branch <branch>] [--output-dir <path>]
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
-LLAMA_STACK_DIR=""
+OGX_DIR=""
 BRANCH="main"
 OUTPUT_DIR="$REPO_DIR/docs"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --ogx-dir) LLAMA_STACK_DIR="$2"; shift 2 ;;
+    --ogx-dir) OGX_DIR="$2"; shift 2 ;;
     --branch) BRANCH="$2"; shift 2 ;;
     --output-dir) OUTPUT_DIR="$2"; shift 2 ;;
     *) echo "Unknown option: $1"; exit 1 ;;
@@ -26,9 +26,9 @@ trap 'rm -rf "$TEMP_DIR"' EXIT
 echo "=== Building latest docs (branch: $BRANCH) ==="
 
 # Step 1: Get ogx source
-if [ -n "$LLAMA_STACK_DIR" ] && [ -d "$LLAMA_STACK_DIR" ]; then
+if [ -n "$OGX_DIR" ] && [ -d "$OGX_DIR" ]; then
   echo "--- Cloning from local repo (branch: $BRANCH) ---"
-  git clone --local --no-checkout "$LLAMA_STACK_DIR" "$TEMP_DIR/ogx"
+  git clone --local --no-checkout "$OGX_DIR" "$TEMP_DIR/ogx"
   cd "$TEMP_DIR/ogx"
   git checkout "$BRANCH"
 else
