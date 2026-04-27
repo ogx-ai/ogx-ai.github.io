@@ -133,10 +133,6 @@ def inline_raw_loader(versioned_dir, repo_root):
             imported_content = imported_content.replace(
                 "](README.md)", "](https://github.com/ogx-ai/ogx#community)"
             )
-            imported_content = imported_content.replace(
-                "](src/ogx/",
-                "](https://github.com/ogx-ai/ogx/blob/main/src/ogx/",
-            )
 
             # Escape MDX-incompatible syntax in imported content
             imported_content = escape_for_mdx(imported_content)
