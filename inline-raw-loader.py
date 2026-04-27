@@ -134,8 +134,8 @@ def inline_raw_loader(versioned_dir, repo_root):
                 "](README.md)", "](https://github.com/ogx-ai/ogx#community)"
             )
             imported_content = imported_content.replace(
-                "](llama_stack/",
-                "](https://github.com/ogx-ai/ogx/blob/main/llama_stack/",
+                "](src/ogx/",
+                "](https://github.com/ogx-ai/ogx/blob/main/src/ogx/",
             )
 
             # Escape MDX-incompatible syntax in imported content

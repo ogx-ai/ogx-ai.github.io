@@ -15,11 +15,11 @@ VERSION="${1:?Usage: $0 <version-tag> [--ogx-dir <path>]}"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Parse optional arguments
-LLAMA_STACK_DIR=""
+OGX_DIR=""
 shift
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --ogx-dir) LLAMA_STACK_DIR="$2"; shift 2 ;;
+    --ogx-dir) OGX_DIR="$2"; shift 2 ;;
     *) echo "Unknown option: $1"; exit 1 ;;
   esac
 done
@@ -32,9 +32,9 @@ trap 'rm -rf "$TEMP_DIR"' EXIT
 echo "=== Building archived version $VERSION ==="
 
 # Step 1: Get ogx at the specified version
-if [ -n "$LLAMA_STACK_DIR" ] && [ -d "$LLAMA_STACK_DIR" ]; then
+if [ -n "$OGX_DIR" ] && [ -d "$OGX_DIR" ]; then
   echo "--- Cloning from local repo ---"
-  git clone --local --no-checkout "$LLAMA_STACK_DIR" "$TEMP_DIR/ogx"
+  git clone --local --no-checkout "$OGX_DIR" "$TEMP_DIR/ogx"
   cd "$TEMP_DIR/ogx"
   git checkout "$VERSION" 2>/dev/null || git checkout "tags/$VERSION"
 else
