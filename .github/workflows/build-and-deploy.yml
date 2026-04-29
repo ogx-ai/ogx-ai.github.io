@@ -278,17 +278,17 @@ jobs:
         [ -f "${{ github.workspace }}/docs/versionsArchived.json" ] && echo "versionsArchived.json exists" || echo "versionsArchived.json missing"
 
     - name: Setup GitHub Pages
-      if: ${{ env.BUILDING_LATEST == 'true' && (github.event.inputs.action == 'build-and-deploy' || github.event_name == 'repository_dispatch') }}
+      if: ${{ github.event.inputs.action == 'build-and-deploy' || github.event.inputs.action == '' || github.event_name == 'repository_dispatch' }}
       uses: actions/configure-pages@v5
 
     - name: Upload Pages artifact
-      if: ${{ env.BUILDING_LATEST == 'true' && (github.event.inputs.action == 'build-and-deploy' || github.event_name == 'repository_dispatch') }}
+      if: ${{ github.event.inputs.action == 'build-and-deploy' || github.event.inputs.action == '' || github.event_name == 'repository_dispatch' }}
       uses: actions/upload-pages-artifact@v3
       with:
         path: 'docs'
 
   deploy:
-    if: ${{ needs.build.outputs.building_latest == 'true' && (github.event.inputs.action == 'build-and-deploy' || github.event_name == 'repository_dispatch') }}
+    if: ${{ github.event.inputs.action == 'build-and-deploy' || github.event.inputs.action == '' || github.event_name == 'repository_dispatch' }}
     runs-on: ubuntu-latest
     needs: build
     permissions:
