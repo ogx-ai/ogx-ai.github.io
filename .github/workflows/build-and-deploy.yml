@@ -209,7 +209,6 @@ jobs:
 
         # Copy Docusaurus build output
         cp -r "${{ env.TEMP_DIR }}/ogx/docs/build/"* "$DOCS_DIR/"
-        cp "${{ github.workspace }}/versions.html" "$DOCS_DIR/versions.html"
 
         # Copy versioning files
         cp "${{ github.workspace }}/versionsArchived.json" "$DOCS_DIR/"

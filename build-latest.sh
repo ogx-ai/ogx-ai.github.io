@@ -79,7 +79,6 @@ rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 cp -r build/* "$OUTPUT_DIR/"
 touch "$OUTPUT_DIR/.nojekyll"
-cp "$REPO_DIR/versions.html" "$OUTPUT_DIR/versions.html"
 
 echo "=== Done ==="
 du -sh "$OUTPUT_DIR"
