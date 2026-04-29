@@ -51,16 +51,16 @@ npm ci 2>&1 | tail -5
 # Step 3: Generate API docs
 echo "--- Generating API docs ---"
 
-if [ -f "static/ogx-spec.yaml" ]; then
-  npm run gen-api-docs stable 2>&1 | grep -E "^Successfully" || true
+if [ -f "static/ogx-spec.yaml" ] || [ -f "static/llama-stack-spec.yaml" ]; then
+  npm run gen-api-docs stable
 fi
 
-if [ -f "static/experimental-ogx-spec.yaml" ]; then
-  npm run gen-api-docs experimental 2>&1 | grep -E "^Successfully" || true
+if [ -f "static/experimental-ogx-spec.yaml" ] || [ -f "static/experimental-llama-stack-spec.yaml" ]; then
+  npm run gen-api-docs experimental
 fi
 
-if [ -f "static/deprecated-ogx-spec.yaml" ]; then
-  npm run gen-api-docs deprecated 2>&1 | grep -E "^Successfully" || true
+if [ -f "static/deprecated-ogx-spec.yaml" ] || [ -f "static/deprecated-llama-stack-spec.yaml" ]; then
+  npm run gen-api-docs deprecated
 fi
 
 # Step 4: Inline raw-loader imports
