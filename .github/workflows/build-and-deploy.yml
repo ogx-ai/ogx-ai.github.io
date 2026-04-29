@@ -132,6 +132,35 @@ jobs:
             console.log('Blog already has explicit include pattern');
           }
         "
+
+        # Replace docsVersionDropdown with a custom dropdown populated from versionsArchived.json
+        node -e "
+          const fs = require('fs');
+          const archived = JSON.parse(fs.readFileSync('versionsArchived.json', 'utf8'));
+          let c = fs.readFileSync('docusaurus.config.ts', 'utf8');
+
+          // Build dropdown items from archived versions
+          const items = Object.entries(archived).map(([tag, url]) =>
+            '            { label: \"' + tag + '\", href: \"' + url + '\" }'
+          ).join(',\n');
+
+          // Replace the docsVersionDropdown block with a custom dropdown
+          c = c.replace(
+            /\{\s*type:\s*'docsVersionDropdown'[\s\S]*?\},\s*\n/,
+            '{\n' +
+            '          type: \"dropdown\",\n' +
+            '          label: \"main (unreleased)\",\n' +
+            '          position: \"right\",\n' +
+            '          items: [\n' +
+            items + ',\n' +
+            '            { to: \"/versions\", label: \"All versions\" },\n' +
+            '          ],\n' +
+            '        },\n'
+          );
+
+          fs.writeFileSync('docusaurus.config.ts', c);
+          console.log('Version dropdown patched with ' + Object.keys(archived).length + ' archived versions');
+        "
         echo "Configuration patched"
 
     - name: Cache stable API docs
