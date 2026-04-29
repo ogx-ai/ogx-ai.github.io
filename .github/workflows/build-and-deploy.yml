@@ -25,6 +25,10 @@ on:
         default: 'main'
         type: string
 
+concurrency:
+  group: docs-build-deploy
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pages: write
@@ -254,6 +258,7 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git add "docs/${{ env.VERSION_TAG }}/" versionsArchived.json
         git diff --staged --quiet || git commit -s -m "docs: add archived version ${{ env.VERSION_TAG }}"
+        git pull --rebase origin main
         git push
 
     # ──────────────────────────────────────────────
