@@ -2,7 +2,7 @@ name: Build and Deploy Docusaurus Documentation
 
 on:
   repository_dispatch:
-    types: [docs-update]
+    types: [docs-update, docs-version-deploy]
   workflow_dispatch:
     inputs:
       version:
@@ -52,7 +52,7 @@ jobs:
         git fetch --all --tags
 
         # Determine version to checkout
-        VERSION="${{ github.event.inputs.version || 'latest' }}"
+        VERSION="${{ github.event.client_payload.version || github.event.inputs.version || 'latest' }}"
         if [ "$VERSION" = "latest" ] || [ -z "$VERSION" ]; then
           LSBRANCH="${{ github.event.inputs.ogx_branch || 'main' }}"
           LSBRANCH="${LSBRANCH:-main}"
@@ -357,6 +357,32 @@ jobs:
         else
           echo "ℹ️ No changes to commit"
         fi
+
+    - name: Update versionsArchived.json
+      if: env.BUILDING_LATEST != 'true'
+      run: |
+        cd "${{ github.workspace }}"
+
+        TAG="${{ env.VERSION_TAG }}"
+        python3 -c "
+        import json
+        with open('versionsArchived.json') as f:
+            archived = json.load(f)
+        tag = '${TAG}'
+        url = 'https://ogx-ai.github.io/${TAG}/'
+        if tag not in archived:
+            archived[tag] = url
+            def version_key(item):
+                parts = item[0].lstrip('v').split('.')
+                return [int(p) for p in parts if p.isdigit()]
+            archived = dict(sorted(archived.items(), key=version_key, reverse=True))
+        with open('versionsArchived.json', 'w') as f:
+            json.dump(archived, f, indent=2)
+            f.write('\n')
+        "
+        git add versionsArchived.json
+        git diff --staged --quiet || git commit -s -m "docs: add ${TAG} to versionsArchived.json"
+        git push
 
     - name: Setup GitHub Pages
       if: ${{ github.event.inputs.action == 'build-and-deploy' || github.event_name == 'repository_dispatch' }}
