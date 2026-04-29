@@ -1,0 +1,1 @@
+{"parameters":[{"name":"benchmark_id","in":"path","required":true,"schema":{"type":"string","title":"Benchmark Id"}},{"name":"job_id","in":"path","required":true,"schema":{"type":"string","title":"Job Id"}}]}

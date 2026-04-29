@@ -1,0 +1,1 @@
+{"parameters":[{"name":"prompt_id","in":"path","required":true,"schema":{"type":"string","description":"The identifier of the prompt to update.","title":"Prompt Id"},"description":"The identifier of the prompt to update."}]}

@@ -1,0 +1,1 @@
+{"parameters":[{"name":"completion_id","in":"path","required":true,"schema":{"type":"string","description":"ID of the chat completion.","title":"Completion Id"},"description":"ID of the chat completion."}]}

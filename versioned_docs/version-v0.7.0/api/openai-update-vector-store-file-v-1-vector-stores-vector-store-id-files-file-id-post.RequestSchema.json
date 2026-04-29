@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"attributes":{"additionalProperties":true,"type":"object","title":"Attributes","description":"The new attributes for the file."}},"required":["attributes"],"title":"OpenAIUpdateVectorStoreFileRequest","description":"Request body for updating a vector store file."}}}}}

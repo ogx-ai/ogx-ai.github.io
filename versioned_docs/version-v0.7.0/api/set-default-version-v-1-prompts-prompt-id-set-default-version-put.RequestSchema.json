@@ -1,0 +1,1 @@
+{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"version":{"type":"integer","title":"Version","description":"The version to set as default."}},"required":["version"],"title":"SetDefaultVersionBodyRequest","description":"Request body model for setting the default version of a prompt."}}}}}

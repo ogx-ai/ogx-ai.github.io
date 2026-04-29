@@ -1,0 +1,69 @@
+---
+id: openai-embeddings-v-1-embeddings-post
+title: "Create embeddings."
+description: "Generate OpenAI-compatible embeddings for the given input using the specified model."
+sidebar_label: "Create embeddings."
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api/llama-stack-specification
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Create embeddings."}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/v1/embeddings"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Generate OpenAI-compatible embeddings for the given input using the specified model.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./openai-embeddings-v-1-embeddings-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./openai-embeddings-v-1-embeddings-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

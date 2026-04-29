@@ -1,0 +1,69 @@
+---
+id: openai-retrieve-vector-store-file-batch-v-1-vector-stores-vector-store-id-file-batches-batch-id-get
+title: "Retrieve a vector store file batch (OpenAI-compatible)."
+description: "Retrieve a vector store file batch (OpenAI-compatible)."
+sidebar_label: "Retrieve a vector store file batch (OpenAI-compatible)."
+hide_title: true
+hide_table_of_contents: true
+api: eJztV9tu2zgQ/ZUBn5JAsZO0RVsDeUhviwAtEiTZBRZxYIylkc2GJlWScmIYeuxf7NftlyyGtGzJdly0u8D2oXmIbepwdDhzeDicC0uuMNqRE725ODk64o+MXGpl4aXRoiduxgS5VARD9Om4IxKRGu1Je4ZiUSiZIkO7nx3j58KlY5ogfyusKch6GaPLjP/7WUGiJ5y3Uo9EIrz0igfOM1Elwgw/U+p34S4iIhEZ5VgqL3piSqk3duC8sdRhqoNAleOlltBTNsBmTKk9jcg2gr6NMDjzPKkZb7Cb9R8BCtcMhbgE59GXYcGoZxe56N1uTiddTkTvVqRmUijylIm7KnkaJvWgsGZkybndwBR1Skp9K16OMmLuVitZgKpEhAymptTebRZxxXhnPpcorsGS1M4pSxRTiAR34T9ESJW0srNrxrmGyxpXJcIbj2rnhJuAqKpEWPpSSsuMmjVrLm3Juc2nfs3dumSCYj5IRW9jopO1XcePoLAmJeekHkFUFcSyQG4sIESdQtT9Bk8ZCK70v6nrpVbbNX+a6xveVo0N2CR8UZA+O4fWhgiLCJMgbmxmyTyfbzOaN5jBFX0pyfnvMZl2kPfWGgu1q0FuzQT8mODs8rwDV6YcjdUMcqOUeXBw9eEtvHx19JJNrS3z1SauU3Fdp2pNLtUyWyvsTfhM1vZfxSnzKFUT+i6ObMFK7TzLa5eTNDa5LpUSvKH5Cw45uLclratiWXG/4Lig1Ch6SCEzoEdkqTfz8fzoaAVsF6xeWzgwbByGB3Qg9RSVzMBYmKDKjZ3wvo06OHm95cAxBj6hntWx3S81/KxqOHnddMvNsi018acpYYxTAnpMiTLKQhksegIlJ9J34FIROgJvZ4AjlBoUerK1YbzYZhjn2pPVqOCa7JQsRKq/xPJziuVF0zqeKt1SMGcaSk2PBaXcl1EojUnT0tqleSwbwPVCvosP4GpRyl+S+P8lEUvmceR4XuwSzi8Y2M74FXkraUpr7U3jBgJ7sdU45EYMvRwq2ueUc8JDVc8z0eNfGuXALsINWr3P6o4wmB63HrnBYK1LGjTQ/DhO4/ER8bFXoMUJebIuZFTjhNauJLHVkry6Av1YNFPISU0a8lvv2DevYq2syIy0l7lko9x5KfmOOKyCxSrqtf6H9Bt13E4+totPsX5iOiv18TA1GV0H34m1UKhHoicuZ35stEiEwiGpZavK7a8pLW8JETZ2lAzISWGshwjq675OlSTt4XQxtDdER4PSqtO+GHtf9LpdZVJUY+N879Wzk+Pu9LgvEsBCDu5pdtoXOd5TX+xzrEj9FGLMTkt6nabQOrVy9/oaAGBNUKd9MXUDHKbHJ8/6IomYulzhYT5sPt7v68JK7fcCZj8kbEJ+bHiv1EL2Y9ET3elxt0WrO197d9VtEu3O69dWnNFg5zH9peVkL1KEenbIGaLsUCmc4KHzmN53UjMJXBylpZV+Fia+q439NtxQpc5N0+Q+8ny45vlwXVAq84WdbxGcdCBdsGzXRILJw2AzlB+j5xvXVGbkYkLX/xAceZ5LOiuM5JsY6tDKSAupsfGgyPi+xoZuc0zJxcBoKcZkfzSWGyCz/SVD7psVTcniqGb4yWSkXIcVxJCDg7//+grXN2dvPr4/OOjxtTYrU17YoSXMZnw+OXiQfgxDTO8f0GZQu6VU0s9gVKJF7YlcJ1wMrYsZmx7zviuM8xMMJ+PCCX7cllsVma8O4n8RcuEynh59t1AoNXMOapsvVHzLC2lfePmU6m3aclPKjFha3l0iWK8caz7nLf+7VVXFw19KsizUu0RM0cp4Ot7ORSYdf89EL0flaMfS964WDroP37L0bUtdDKKe8RpRlfxLJOKeZluOHvbzH6b2tF1/P7Flaqu7KhFjwoxsSFx8fJamVPjGxI1GrWVav72/EVX1D/vrJT0=
+sidebar_class_name: "get api-method"
+info_path: docs/api/llama-stack-specification
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Retrieve a vector store file batch (OpenAI-compatible)."}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/v1/vector_stores/{vector_store_id}/file_batches/{batch_id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Retrieve a vector store file batch (OpenAI-compatible).
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  {...require("./openai-retrieve-vector-store-file-batch-v-1-vector-stores-vector-store-id-file-batches-batch-id-get.ParamsDetails.json")}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./openai-retrieve-vector-store-file-batch-v-1-vector-stores-vector-store-id-file-batches-batch-id-get.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./openai-retrieve-vector-store-file-batch-v-1-vector-stores-vector-store-id-file-batches-batch-id-get.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

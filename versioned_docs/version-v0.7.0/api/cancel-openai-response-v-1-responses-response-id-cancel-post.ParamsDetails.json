@@ -1,0 +1,1 @@
+{"parameters":[{"name":"response_id","in":"path","required":true,"schema":{"type":"string","description":"The ID of the OpenAI response to cancel.","title":"Response Id"},"description":"The ID of the OpenAI response to cancel."}]}

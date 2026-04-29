@@ -1,0 +1,1 @@
+{"parameters":[{"name":"provider_id","in":"path","required":true,"schema":{"type":"string","description":"The ID of the provider to inspect.","title":"Provider Id"},"description":"The ID of the provider to inspect."}]}

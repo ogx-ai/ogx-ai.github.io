@@ -1,0 +1,1 @@
+{"parameters":[{"name":"toolgroup_id","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"The ID of the tool group to filter tools by.","title":"Toolgroup Id"},"description":"The ID of the tool group to filter tools by."}]}

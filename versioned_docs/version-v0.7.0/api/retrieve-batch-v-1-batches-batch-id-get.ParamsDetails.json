@@ -1,0 +1,1 @@
+{"parameters":[{"name":"batch_id","in":"path","required":true,"schema":{"type":"string","description":"The ID of the batch to retrieve.","title":"Batch Id"},"description":"The ID of the batch to retrieve."}]}

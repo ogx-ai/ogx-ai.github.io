@@ -1,0 +1,69 @@
+---
+id: process-file-v-1-alpha-file-processors-process-post
+title: "Process a file into chunks ready for vector database storage."
+description: "Process a file into chunks ready for vector database storage. Supports direct upload via multipart form or processing files already uploaded to file storage via file_id. Exactly one of file or file_id must be provided."
+sidebar_label: "Process a file into chunks ready for vector database storage."
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/api-experimental/llama-stack-specification-experimental-apis
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Process a file into chunks ready for vector database storage."}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/v1alpha/file-processors/process"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Process a file into chunks ready for vector database storage. Supports direct upload via multipart form or processing files already uploaded to file storage via file_id. Exactly one of file or file_id must be provided.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  {...require("./process-file-v-1-alpha-file-processors-process-post.RequestSchema.json")}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  {...require("./process-file-v-1-alpha-file-processors-process-post.StatusCodes.json")}
+>
+  
+</StatusCodes>
+
+
+      

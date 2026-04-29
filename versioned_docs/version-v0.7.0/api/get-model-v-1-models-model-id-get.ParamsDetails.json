@@ -1,0 +1,1 @@
+{"parameters":[{"name":"model_id","in":"path","required":true,"schema":{"type":"string","description":"The ID of the model to get.","title":"Model Id"},"description":"The ID of the model to get."}]}

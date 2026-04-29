@@ -1,0 +1,1 @@
+{"parameters":[{"name":"identifier","in":"path","required":true,"schema":{"type":"string","description":"The identifier of the shield to get.","title":"Identifier"},"description":"The identifier of the shield to get."}]}
