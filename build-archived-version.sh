@@ -69,7 +69,7 @@ python3 "$REPO_DIR/inline-raw-loader.py" docs "$TEMP_DIR/ogx"
 
 # Step 5: Patch config for standalone archived build
 echo "--- Patching config for baseUrl: /$VERSION/ ---"
-export VERSION
+export VERSION REPO_DIR
 node << 'CONFIGEOF'
 const fs = require('fs');
 const version = process.env.VERSION;
@@ -96,6 +96,36 @@ const bannerEntry = `
 config = config.replace(
   /themeConfig:\s*\{/,
   `themeConfig: {${bannerEntry}`
+);
+
+// Replace docsVersionDropdown with a custom dropdown showing this version
+// Read versionsArchived.json if available for cross-linking
+let archivedItems = '';
+const archivedPath = `${process.env.REPO_DIR || '.'}/versionsArchived.json`;
+try {
+  const archived = JSON.parse(fs.readFileSync(archivedPath, 'utf8'));
+  const items = Object.entries(archived)
+    .filter(([tag]) => tag !== version)
+    .map(([tag, url]) => `            { label: "${tag}", href: "${url}" }`);
+  if (items.length > 0) {
+    archivedItems = items.join(',\n') + ',\n';
+  }
+} catch (e) {
+  console.log('No versionsArchived.json found, skipping cross-links');
+}
+
+config = config.replace(
+  /\{\s*type:\s*'docsVersionDropdown'[\s\S]*?\},\s*\n/,
+  '{\n' +
+  '          type: "dropdown",\n' +
+  `          label: "${version}",\n` +
+  '          position: "right",\n' +
+  '          items: [\n' +
+  '            { label: "main (unreleased)", href: "https://ogx-ai.github.io/" },\n' +
+  archivedItems +
+  '            { label: "All versions", href: "https://ogx-ai.github.io/versions" },\n' +
+  '          ],\n' +
+  '        },\n'
 );
 
 fs.writeFileSync('docusaurus.config.ts', config);
