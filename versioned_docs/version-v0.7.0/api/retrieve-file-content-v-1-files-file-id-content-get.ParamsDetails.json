@@ -1,1 +1,0 @@
-{"parameters":[{"name":"file_id","in":"path","required":true,"schema":{"type":"string","description":"The ID of the file to retrieve content from.","title":"File Id"},"description":"The ID of the file to retrieve content from."}]}

@@ -1,1 +1,0 @@
-{"parameters":[{"name":"benchmark_id","in":"path","required":true,"schema":{"type":"string","description":"The ID of the benchmark to get.","title":"Benchmark Id"},"description":"The ID of the benchmark to get."}]}

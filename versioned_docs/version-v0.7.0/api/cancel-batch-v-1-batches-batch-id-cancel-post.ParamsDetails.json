@@ -1,1 +1,0 @@
-{"parameters":[{"name":"batch_id","in":"path","required":true,"schema":{"type":"string","description":"The ID of the batch to cancel.","title":"Batch Id"},"description":"The ID of the batch to cancel."}]}
