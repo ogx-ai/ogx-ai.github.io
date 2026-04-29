@@ -115,7 +115,7 @@ try {
 }
 
 config = config.replace(
-  /\{\s*type:\s*'docsVersionDropdown'[\s\S]*?\},\s*\n/,
+  /\{\s*type:\s*'docsVersionDropdown'[\s\S]*?\n\s{8}\},\n/,
   '{\n' +
   '          type: "dropdown",\n' +
   `          label: "${version}",\n` +

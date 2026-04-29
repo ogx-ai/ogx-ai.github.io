@@ -146,7 +146,7 @@ jobs:
 
           // Replace the docsVersionDropdown block with a custom dropdown
           c = c.replace(
-            /\{\s*type:\s*'docsVersionDropdown'[\s\S]*?\},\s*\n/,
+            /\{\s*type:\s*'docsVersionDropdown'[\s\S]*?\n\s{8}\},\n/,
             '{\n' +
             '          type: \"dropdown\",\n' +
             '          label: \"main (unreleased)\",\n' +
