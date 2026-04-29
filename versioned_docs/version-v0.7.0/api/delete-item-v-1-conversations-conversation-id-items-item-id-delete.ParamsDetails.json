@@ -1,1 +1,0 @@
-{"parameters":[{"name":"conversation_id","in":"path","required":true,"schema":{"type":"string","description":"The conversation identifier.","title":"Conversation Id"},"description":"The conversation identifier."},{"name":"item_id","in":"path","required":true,"schema":{"type":"string","description":"The item identifier.","title":"Item Id"},"description":"The item identifier."}]}

@@ -1,1 +1,0 @@
-{"parameters":[{"name":"vector_store_id","in":"path","required":true,"schema":{"type":"string","description":"The vector store identifier.","title":"Vector Store Id"},"description":"The vector store identifier."}]}

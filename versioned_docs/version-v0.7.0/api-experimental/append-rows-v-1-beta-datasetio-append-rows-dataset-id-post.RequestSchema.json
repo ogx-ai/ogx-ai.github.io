@@ -1,1 +1,0 @@
-{"title":"Body","body":{"required":true,"content":{"application/json":{"schema":{"properties":{"rows":{"items":{"additionalProperties":true,"type":"object"},"type":"array","title":"Rows","description":"The rows to append to the dataset."}},"required":["rows"],"title":"AppendRowsRequest","description":"Request body for appending rows to a dataset."}}}}}

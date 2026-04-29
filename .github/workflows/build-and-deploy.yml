@@ -43,7 +43,7 @@ jobs:
 
     - name: Clone ogx repository
       run: |
-        echo "📥 Cloning ogx repository..."
+        echo "Cloning ogx repository..."
         TEMP_DIR=$(mktemp -d)
         echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
 
@@ -57,12 +57,12 @@ jobs:
           LSBRANCH="${{ github.event.inputs.ogx_branch || 'main' }}"
           LSBRANCH="${LSBRANCH:-main}"
           git checkout "$LSBRANCH"
-          echo "✅ Using branch: $LSBRANCH"
+          echo "Using branch: $LSBRANCH"
           echo "BUILDING_LATEST=true" >> $GITHUB_ENV
           echo "VERSION_TAG=latest" >> $GITHUB_ENV
         else
           git checkout "$VERSION"
-          echo "✅ Using tag: $VERSION"
+          echo "Using tag: $VERSION"
           echo "BUILDING_LATEST=false" >> $GITHUB_ENV
           echo "VERSION_TAG=$VERSION" >> $GITHUB_ENV
         fi
@@ -77,7 +77,12 @@ jobs:
       with:
         python-version: '3.12'
 
+    # ──────────────────────────────────────────────
+    # Latest build path
+    # ──────────────────────────────────────────────
+
     - name: Setup caching for build artifacts
+      if: env.BUILDING_LATEST == 'true'
       uses: actions/cache@v4
       id: cache-npm
       with:
@@ -87,13 +92,14 @@ jobs:
           npm-${{ runner.os }}-
 
     - name: Install dependencies and setup versioning
+      if: env.BUILDING_LATEST == 'true'
       run: |
-        echo "📦 Installing dependencies..."
+        echo "Installing dependencies..."
         cd "${{ env.TEMP_DIR }}/ogx/docs"
         npm ci
-        echo "✅ Dependencies installed"
+        echo "Dependencies installed"
 
-        echo "⚙️ Setting up versioning configuration..."
+        echo "Setting up versioning configuration..."
 
         # Copy persistent versionsArchived.json from repo
         cp "${{ github.workspace }}/versionsArchived.json" ./
@@ -101,33 +107,26 @@ jobs:
         # Archived versions are served as standalone static HTML under docs/vX.Y.Z/
         # Docusaurus versioning is not used - always write empty versions.json
         echo "[]" > versions.json
-        echo "✅ Created empty versions.json (archived versions are static HTML, not Docusaurus versions)"
 
         # Fix GitHub org to match this repo's owner
         sed -i "s|https://github.com/ogx-ai/ogx|https://github.com/${{ github.repository_owner }}/ogx|g" docusaurus.config.ts
 
         # Restrict blog to top-level .md/.mdx files only (exclude subdirectory files)
-        # Docusaurus defaults to '**/*.{md,mdx}' which picks up non-blog .md files from subfolders
         node -e "
           const fs = require('fs');
           let c = fs.readFileSync('docusaurus.config.ts', 'utf8');
           if (!c.match(/blog[\s\S]*?include:/)) {
             c = c.replace(/(blog:\s*\{)/, \"\\\$1\\n        include: ['*.{md,mdx}'],\");
             fs.writeFileSync('docusaurus.config.ts', c);
-            console.log('✅ Blog include pattern set to top-level only');
+            console.log('Blog include pattern set to top-level only');
           } else {
-            console.log('ℹ️ Blog already has explicit include pattern');
+            console.log('Blog already has explicit include pattern');
           }
         "
-        echo "✅ Configuration patched"
-
-
-
-
-
-
+        echo "Configuration patched"
 
     - name: Cache stable API docs
+      if: env.BUILDING_LATEST == 'true'
       uses: actions/cache@v4
       id: cache-api-stable
       with:
@@ -136,6 +135,7 @@ jobs:
         restore-keys: api-stable-
 
     - name: Cache experimental API docs
+      if: env.BUILDING_LATEST == 'true'
       uses: actions/cache@v4
       id: cache-api-experimental
       with:
@@ -144,6 +144,7 @@ jobs:
         restore-keys: api-experimental-
 
     - name: Cache deprecated API docs
+      if: env.BUILDING_LATEST == 'true'
       uses: actions/cache@v4
       id: cache-api-deprecated
       with:
@@ -151,124 +152,52 @@ jobs:
         key: api-deprecated-${{ hashFiles('${{ env.TEMP_DIR }}/ogx/docs/static/deprecated-ogx-spec.yaml') }}
         restore-keys: api-deprecated-
 
-    - name: Build documentation
+    - name: Generate API docs
+      if: env.BUILDING_LATEST == 'true'
       run: |
         cd "${{ env.TEMP_DIR }}/ogx/docs"
 
-        # Generate API docs in parallel for better performance
-        echo "🔄 Generating API docs in parallel..."
-
-        # Start background processes for each API docs generation
+        echo "Generating API docs in parallel..."
         PIDS=()
 
-        # Generate stable API docs if not cached
         if [ "${{ steps.cache-api-stable.outputs.cache-hit }}" != 'true' ]; then
-          echo "  📄 Starting stable API docs generation (cache miss)..."
           npm run gen-api-docs stable &
-          STABLE_PID=$!
-          PIDS+=($STABLE_PID)
-          echo "  🔄 Stable API docs generation started (PID: $STABLE_PID)"
-        else
-          echo "  ⚡ Using cached stable API docs"
+          PIDS+=($!)
         fi
 
-        # Generate experimental API docs if not cached
         if [ "${{ steps.cache-api-experimental.outputs.cache-hit }}" != 'true' ]; then
-          echo "  📄 Starting experimental API docs generation (cache miss)..."
           npm run gen-api-docs experimental &
-          EXPERIMENTAL_PID=$!
-          PIDS+=($EXPERIMENTAL_PID)
-          echo "  🔄 Experimental API docs generation started (PID: $EXPERIMENTAL_PID)"
-        else
-          echo "  ⚡ Using cached experimental API docs"
+          PIDS+=($!)
         fi
 
-        # Generate deprecated API docs if not cached
         if [ "${{ steps.cache-api-deprecated.outputs.cache-hit }}" != 'true' ]; then
-          echo "  📄 Starting deprecated API docs generation (cache miss)..."
           npm run gen-api-docs deprecated &
-          DEPRECATED_PID=$!
-          PIDS+=($DEPRECATED_PID)
-          echo "  🔄 Deprecated API docs generation started (PID: $DEPRECATED_PID)"
-        else
-          echo "  ⚡ Using cached deprecated API docs"
+          PIDS+=($!)
         fi
 
-        # Wait for all parallel processes to complete
-        if [ ${#PIDS[@]} -gt 0 ]; then
-          echo "  ⏳ Waiting for ${#PIDS[@]} API docs generation processes to complete..."
-          for pid in "${PIDS[@]}"; do
-            echo "    ⏳ Waiting for process $pid..."
-            if wait $pid; then
-              echo "    ✅ Process $pid completed successfully"
-            else
-              echo "    ❌ Process $pid failed"
-              exit 1
-            fi
-          done
-        fi
+        for pid in "${PIDS[@]}"; do
+          wait $pid || exit 1
+        done
 
-        echo "✅ API docs generation completed"
-
-        # Create version if not latest (after content is ready)
-        if [ "${{ env.BUILDING_LATEST }}" != "true" ]; then
-          echo "📚 Creating Docusaurus version: ${{ env.VERSION_TAG }}"
-
-          # Create the version snapshot
-          npx docusaurus docs:version "${{ env.VERSION_TAG }}"
-
-          # Ensure prompt-format.png is available where versioned docs expect it
-          mkdir -p versioned_docs/resources
-          if [ ! -f "versioned_docs/resources/prompt-format.png" ]; then
-            echo "📥 Downloading missing prompt-format.png..."
-            curl -o versioned_docs/resources/prompt-format.png https://raw.githubusercontent.com/${{ github.repository_owner }}/ogx/main/docs/static/img/prompt-format.png
-            echo "✅ Downloaded prompt-format.png to versioned_docs/resources/"
-          else
-            echo "✅ prompt-format.png already exists in versioned_docs/resources/"
-          fi
-
-          echo "✅ Version ${{ env.VERSION_TAG }} created"
-        else
-          echo "🏗️ Building latest version (no version snapshot needed)"
-        fi
-
-    - name: Inline raw-loader imports in versioned docs
-      if: env.BUILDING_LATEST != 'true'
-      run: |
-        cd "${{ env.TEMP_DIR }}/ogx/docs"
-
-        echo "🔧 Inlining raw-loader imports in versioned docs..."
-
-        if [ -d "versioned_docs" ]; then
-          for version_dir in versioned_docs/version-*; do
-            if [ -d "$version_dir" ]; then
-              echo "  Processing $version_dir..."
-              python3 "${{ github.workspace }}/inline-raw-loader.py" "$version_dir" "${{ env.TEMP_DIR }}/ogx"
-            fi
-          done
-          echo "✅ Versioned docs raw-loader imports inlined"
-        else
-          echo "ℹ️ No versioned docs found"
-        fi
+        echo "API docs generation completed"
 
     - name: Build Docusaurus site
+      if: env.BUILDING_LATEST == 'true'
       run: |
         cd "${{ env.TEMP_DIR }}/ogx/docs"
 
         # Patch out duplicate version badges from OpenAPI MDX files
-        echo "🔧 Patching out duplicate version badges..."
         find . -name "ogx-specification.info.mdx" -type f -exec sed -i '/<span$/,/<\/span>$/d' {} \;
 
-        echo "🏗️ Running Docusaurus build..."
+        echo "Running Docusaurus build..."
         npm run build
-
-        echo "✅ Docusaurus build completed"
+        echo "Docusaurus build completed"
       env:
         NODE_OPTIONS: "--max-old-space-size=10240"
 
-    - name: Deploy to GitHub Pages
+    - name: Deploy latest build to docs/
+      if: env.BUILDING_LATEST == 'true'
       run: |
-        echo "🗂️ Deploying Docusaurus build..."
         DOCS_DIR="${{ github.workspace }}/docs"
 
         # Clear everything except .git, .nojekyll, and archived versions (static HTML under v*)
@@ -278,91 +207,26 @@ jobs:
         cp -r "${{ env.TEMP_DIR }}/ogx/docs/build/"* "$DOCS_DIR/"
         cp "${{ github.workspace }}/versions.html" "$DOCS_DIR/versions.html"
 
-        # Ensure .nojekyll exists
+        # Copy versioning files
+        cp "${{ github.workspace }}/versionsArchived.json" "$DOCS_DIR/"
+        echo "[]" > "$DOCS_DIR/versions.json"
+
         touch "$DOCS_DIR/.nojekyll"
 
-        echo "✅ Docusaurus content deployed"
+        echo "Latest build deployed to docs/"
 
-    - name: Update workspace artifacts
+    # ──────────────────────────────────────────────
+    # Versioned (archived) build path
+    # ──────────────────────────────────────────────
+
+    - name: Build archived version
       if: env.BUILDING_LATEST != 'true'
       run: |
-        echo "📋 Updating workspace versioning artifacts..."
-
-        BUILD_PATH="${{ env.TEMP_DIR }}/ogx/docs"
-
-        # Copy versioned docs and sidebars to workspace (for git commit)
-        if [ -d "$BUILD_PATH/versioned_docs" ]; then
-          cp -r "$BUILD_PATH/versioned_docs" "${{ github.workspace }}/"
-          echo "✅ Copied versioned_docs to workspace"
-        fi
-
-        if [ -d "$BUILD_PATH/versioned_sidebars" ]; then
-          cp -r "$BUILD_PATH/versioned_sidebars" "${{ github.workspace }}/"
-          echo "✅ Copied versioned_sidebars to workspace"
-        fi
-
-        # Copy updated versions.json to workspace
-        cp "$BUILD_PATH/versions.json" "${{ github.workspace }}/"
-        echo "✅ Updated workspace versions.json"
-
-    - name: Setup versioning files in deployed site
-      run: |
-        echo "⚙️ Setting up versioning configuration files..."
-
-        BUILD_PATH="${{ env.TEMP_DIR }}/ogx/docs"
-
-        # Copy versioning files to deployment
-        cp "$BUILD_PATH/versionsArchived.json" "${{ github.workspace }}/docs/"
-        cp "$BUILD_PATH/versions.json" "${{ github.workspace }}/docs/"
-
-        echo "✅ Versioning files created"
-
-    - name: Verify deployment structure
-      run: |
-        echo "🔍 Verifying deployment structure..."
-
-        echo "Contents of docs directory:"
-        ls -la "${{ github.workspace }}/docs/" | head -10
-
-        echo -e "\nVersioning files:"
-        [ -f "${{ github.workspace }}/docs/versionsArchived.json" ] && echo "✅ versionsArchived.json exists" || echo "❌ versionsArchived.json missing"
-        [ -f "${{ github.workspace }}/docs/versions.json" ] && echo "✅ versions.json exists" || echo "❌ versions.json missing"
-
-        echo -e "\n✅ Structure verification complete"
-
-    - name: Commit versioning artifacts
-      if: env.BUILDING_LATEST != 'true'
-      run: |
-        echo "💾 Committing versioning artifacts..."
-
-        cd "${{ github.workspace }}"
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-
-        # Add versioning artifacts
-        git add versioned_docs/ versioned_sidebars/ versions.json 2>/dev/null || true
-
-        # Commit if there are changes
-        if ! git diff --staged --quiet; then
-          git commit -m "Add Docusaurus version ${{ env.VERSION_TAG }}
-
-          - Created version snapshot in versioned_docs/version-${{ env.VERSION_TAG }}/
-          - Updated versions.json with new version
-          - Built and deployed multi-version site
-
-          🤖 Generated by Docusaurus versioning workflow"
-
-          git push
-          echo "✅ Changes committed and pushed"
-        else
-          echo "ℹ️ No changes to commit"
-        fi
+        ./build-archived-version.sh "${{ env.VERSION_TAG }}" --ogx-dir "${{ env.TEMP_DIR }}/ogx"
 
     - name: Update versionsArchived.json
       if: env.BUILDING_LATEST != 'true'
       run: |
-        cd "${{ github.workspace }}"
-
         TAG="${{ env.VERSION_TAG }}"
         python3 -c "
         import json
@@ -380,9 +244,29 @@ jobs:
             json.dump(archived, f, indent=2)
             f.write('\n')
         "
-        git add versionsArchived.json
-        git diff --staged --quiet || git commit -s -m "docs: add ${TAG} to versionsArchived.json"
+        # Also update the deployed copy
+        cp versionsArchived.json docs/
+
+    - name: Commit archived version
+      if: env.BUILDING_LATEST != 'true'
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add "docs/${{ env.VERSION_TAG }}/" versionsArchived.json
+        git diff --staged --quiet || git commit -s -m "docs: add archived version ${{ env.VERSION_TAG }}"
         git push
+
+    # ──────────────────────────────────────────────
+    # Common: verify and upload Pages artifact
+    # ──────────────────────────────────────────────
+
+    - name: Verify deployment structure
+      run: |
+        echo "Contents of docs directory:"
+        ls -la "${{ github.workspace }}/docs/" | head -10
+
+        echo -e "\nVersioning files:"
+        [ -f "${{ github.workspace }}/docs/versionsArchived.json" ] && echo "versionsArchived.json exists" || echo "versionsArchived.json missing"
 
     - name: Setup GitHub Pages
       if: ${{ github.event.inputs.action == 'build-and-deploy' || github.event_name == 'repository_dispatch' }}

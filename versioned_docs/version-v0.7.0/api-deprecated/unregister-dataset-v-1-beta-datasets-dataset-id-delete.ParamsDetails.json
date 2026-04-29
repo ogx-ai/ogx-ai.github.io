@@ -1,1 +1,0 @@
-{"parameters":[{"name":"dataset_id","in":"path","required":true,"schema":{"type":"string","description":"The ID of the dataset to unregister.","title":"Dataset Id"},"description":"The ID of the dataset to unregister."}]}

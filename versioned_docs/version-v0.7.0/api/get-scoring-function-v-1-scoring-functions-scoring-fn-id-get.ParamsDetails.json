@@ -1,1 +1,0 @@
-{"parameters":[{"name":"scoring_fn_id","in":"path","required":true,"schema":{"type":"string","description":"The ID of the scoring function to get.","title":"Scoring Fn Id"},"description":"The ID of the scoring function to get."}]}
