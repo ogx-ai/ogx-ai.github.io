@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-providers/file_processors/inline_unstructured" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">inline::unstructured | OGX</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://ogx-ai.github.io/v1.2.1/img/ogx.png"><meta data-rh="true" name="twitter:image" content="https://ogx-ai.github.io/v1.2.1/img/ogx.png"><meta data-rh="true" property="og:url" content="https://ogx-ai.github.io/v1.2.1/docs/providers/file_processors/inline_unstructured"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="inline::unstructured | OGX"><meta data-rh="true" name="description" content="[Unstructured](https://github.com/Unstructured-IO/unstructured) is a comprehensive document
+processing library supporting 65+ file formats including PDF, Office documents (DOCX, PPTX, XLSX),
+email formats (EML, MSG), legacy formats (DOC, XLS), HTML, Markdown, and audio transcription.
+
+This provider uses the local Unstructured library for offline document processing. For cloud-based
+processing with better table extraction, use `remote::unstructured-api` instead.
+
+## Features
+
+- 65+ format support - broadest format coverage of any OGX file processor
+- Email processing - EML and MSG email formats (unique to Unstructured)
+- Legacy formats - DOC, XLS, and other legacy Office formats
+- Audio transcription - MP3, WAV, M4A via Whisper
+- Local processing - no network required, cost-effective for high volume
+- Structure-aware chunking - preserves document sections and headings
+
+## Limitations
+
+WARNING: Table detection is unreliable in local mode (GitHub issue [#2997](https://github.com/Unstructured-IO/unstructured/issues/2997)).
+For production table extraction, use `remote::unstructured-api` instead.
+
+## System Requirements
+
+Required system dependencies:
+- `libmagic-dev` - file type detection
+- `poppler-utils` - PDF processing
+- `tesseract-ocr` - OCR support
+
+Optional (for Office documents):
+- `libreoffice` - Office document conversion (~800 MB)
+
+### macOS
+```bash
+brew install libmagic poppler tesseract
+# Optional: brew install libreoffice
+```
+
+### Ubuntu/Debian
+```bash
+sudo apt-get update &amp;&amp; sudo apt-get install -y \
+    libmagic-dev \
+    poppler-utils \
+    tesseract-ocr
+# Optional: sudo apt-get install -y libreoffice
+```
+
+### Docker (Recommended)
+```dockerfile
+FROM python:3.12-slim
+
+RUN apt-get update &amp;&amp; apt-get install -y \
+    libmagic-dev \
+    poppler-utils \
+    tesseract-ocr \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+RUN pip install ogx[unstructured-local]
+```
+
+## Installation
+
+```bash
+pip install &quot;ogx[unstructured-local]&quot;
+```
+
+Then install system dependencies as shown above.
+
+## Usage
+
+Start OGX with the Unstructured file processor:
+
+```bash
+ogx stack run \
+  --providers &quot;file_processors=inline::unstructured&quot; \
+  --port 8321
+```
+
+Or add it to a custom `run.yaml`:
+
+```yaml
+file_processors:
+  - provider_id: unstructured
+    provider_type: inline::unstructured
+    config:
+      strategy: auto  # or &#x27;fast&#x27;, &#x27;hi_res&#x27;, &#x27;ocr_only&#x27;
+      skip_infer_table_types: [&quot;pdf&quot;]  # Workaround for table issues
+```
+
+## When to Use
+
+**Use `inline::unstructured` when:**
+- You need email format support (EML, MSG)
+- You need legacy Office formats (DOC, XLS)
+- You need audio transcription
+- You need offline/local processing
+- You need the broadest format coverage
+
+**Use `inline::docling` when:**
+- You need precise token-based chunking
+- You need best-in-class table extraction
+- You primarily process PDF/DOCX/PPTX
+
+**Use `remote::unstructured-api` when:**
+- You need reliable table extraction
+- You have network connectivity and API key
+- You want to avoid system dependencies
+
+## Documentation
+
+See [Unstructured&#x27;s documentation](https://docs.unstructured.io/) for more details.
+"><meta data-rh="true" property="og:description" content="[Unstructured](https://github.com/Unstructured-IO/unstructured) is a comprehensive document
+processing library supporting 65+ file formats including PDF, Office documents (DOCX, PPTX, XLSX),
+email formats (EML, MSG), legacy formats (DOC, XLS), HTML, Markdown, and audio transcription.
+
+This provider uses the local Unstructured library for offline document processing. For cloud-based
+processing with better table extraction, use `remote::unstructured-api` instead.
+
+## Features
+
+- 65+ format support - broadest format coverage of any OGX file processor
+- Email processing - EML and MSG email formats (unique to Unstructured)
+- Legacy formats - DOC, XLS, and other legacy Office formats
+- Audio transcription - MP3, WAV, M4A via Whisper
+- Local processing - no network required, cost-effective for high volume
+- Structure-aware chunking - preserves document sections and headings
+
+## Limitations
+
+WARNING: Table detection is unreliable in local mode (GitHub issue [#2997](https://github.com/Unstructured-IO/unstructured/issues/2997)).
+For production table extraction, use `remote::unstructured-api` instead.
+
+## System Requirements
+
+Required system dependencies:
+- `libmagic-dev` - file type detection
+- `poppler-utils` - PDF processing
+- `tesseract-ocr` - OCR support
+
+Optional (for Office documents):
+- `libreoffice` - Office document conversion (~800 MB)
+
+### macOS
+```bash
+brew install libmagic poppler tesseract
+# Optional: brew install libreoffice
+```
+
+### Ubuntu/Debian
+```bash
+sudo apt-get update &amp;&amp; sudo apt-get install -y \
+    libmagic-dev \
+    poppler-utils \
+    tesseract-ocr
+# Optional: sudo apt-get install -y libreoffice
+```
+
+### Docker (Recommended)
+```dockerfile
+FROM python:3.12-slim
+
+RUN apt-get update &amp;&amp; apt-get install -y \
+    libmagic-dev \
+    poppler-utils \
+    tesseract-ocr \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+RUN pip install ogx[unstructured-local]
+```
+
+## Installation
+
+```bash
+pip install &quot;ogx[unstructured-local]&quot;
+```
+
+Then install system dependencies as shown above.
+
+## Usage
+
+Start OGX with the Unstructured file processor:
+
+```bash
+ogx stack run \
+  --providers &quot;file_processors=inline::unstructured&quot; \
+  --port 8321
+```
+
+Or add it to a custom `run.yaml`:
+
+```yaml
+file_processors:
+  - provider_id: unstructured
+    provider_type: inline::unstructured
+    config:
+      strategy: auto  # or &#x27;fast&#x27;, &#x27;hi_res&#x27;, &#x27;ocr_only&#x27;
+      skip_infer_table_types: [&quot;pdf&quot;]  # Workaround for table issues
+```
+
+## When to Use
+
+**Use `inline::unstructured` when:**
+- You need email format support (EML, MSG)
+- You need legacy Office formats (DOC, XLS)
+- You need audio transcription
+- You need offline/local processing
+- You need the broadest format coverage
+
+**Use `inline::docling` when:**
+- You need precise token-based chunking
+- You need best-in-class table extraction
+- You primarily process PDF/DOCX/PPTX
+
+**Use `remote::unstructured-api` when:**
+- You need reliable table extraction
+- You have network connectivity and API key
+- You want to avoid system dependencies
+
+## Documentation
+
+See [Unstructured&#x27;s documentation](https://docs.unstructured.io/) for more details.
+"><link data-rh="true" rel="icon" href="/v1.2.1/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://ogx-ai.github.io/v1.2.1/docs/providers/file_processors/inline_unstructured"><link data-rh="true" rel="alternate" href="https://ogx-ai.github.io/v1.2.1/docs/providers/file_processors/inline_unstructured" hreflang="en"><link data-rh="true" rel="alternate" href="https://ogx-ai.github.io/v1.2.1/docs/providers/file_processors/inline_unstructured" hreflang="x-default"><link rel="alternate" type="application/rss+xml" href="/v1.2.1/blog/rss.xml" title="OGX Blog RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/v1.2.1/blog/atom.xml" title="OGX Blog Atom Feed">
+<link rel="alternate" type="application/json" href="/v1.2.1/blog/feed.json" title="OGX Blog JSON Feed">
+
+
+
+
+
+
+
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/img/ogx-logo.png">
+<meta name="theme-color" content="#0d7377">
+<link rel="manifest" href="/site.webmanifest"><link rel="stylesheet" href="/v1.2.1/assets/css/styles.fe0e806e.css">
+<script src="/v1.2.1/assets/js/runtime~main.9e848200.js" defer="defer"></script>
+<script src="/v1.2.1/assets/js/main.a415e9a7.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||"dark"),document.documentElement.setAttribute("data-theme-choice",t||"dark")}(),function(){try{const n=new URLSearchParams(window.location.search).entries();for(var[t,e]of n)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}(),document.documentElement.setAttribute("data-announcement-bar-initially-dismissed",function(){try{return"true"===localStorage.getItem("docusaurus.announcement.dismiss")}catch(t){}return!1}())</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><div class="theme-announcement-bar announcementBar_mb4j" style="background-color:#2b3137;color:#ffffff" role="banner"><div class="content_knG7 announcementBarContent_xLdY">This is documentation for <b>v1.2.1</b>. For the latest version, visit <a href="https://ogx-ai.github.io/">the main site</a>.</div></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top navbarHideable_m1mJ"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/v1.2.1/"><b class="navbar__title text--truncate">OGX</b></a><a class="navbar__item navbar__link" href="/v1.2.1/docs">Docs</a><div class="navbar__item dropdown dropdown--hoverable"><a class="navbar__link" aria-haspopup="true" aria-expanded="false" role="button" href="/v1.2.1/docs/api-overview">API Reference</a><ul class="dropdown__menu"><li><a class="dropdown__link" href="/v1.2.1/docs/api/ogx-specification">Stable</a></li><li><a class="dropdown__link" href="/v1.2.1/docs/api-experimental/ogx-specification-experimental-apis">Experimental</a></li><li><a class="dropdown__link" href="/v1.2.1/docs/api-deprecated/ogx-specification-deprecated-apis">Deprecated</a></li></ul></div><a class="navbar__item navbar__link" href="/v1.2.1/blog">Blogs</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/ogx-ai/ogx" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a href="#" aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link">v1.2.1</a><ul class="dropdown__menu"><li><a href="https://ogx-ai.github.io/" target="_blank" rel="noopener noreferrer" class="dropdown__link">main (unreleased)<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v1.2.0/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v1.2.0<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v1.1.3/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v1.1.3<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v1.1.2/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v1.1.2<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v1.1.1/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v1.1.1<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v1.1.0/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v1.1.0<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v1.0.2/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v1.0.2<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v1.0.1/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v1.0.1<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v1.0.0/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v1.0.0<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.8.0/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.8.0<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.7.1/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.7.1<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.7.0/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.7.0<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.3.0/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.3.0<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.22/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.22<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.21/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.21<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.20/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.20<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.19/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.19<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.18/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.18<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.17/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.17<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.16/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.16<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.15/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.15<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.14/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.14<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.13/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.13<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.12/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.12<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/v0.2.11/" target="_blank" rel="noopener noreferrer" class="dropdown__link">v0.2.11<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://ogx-ai.github.io/versions" target="_blank" rel="noopener noreferrer" class="dropdown__link">All versions<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search searchBarContainer_NW3z" dir="ltr"><input placeholder="Search" aria-label="Search" class="navbar__search-input searchInput_YFbd" value=""><div class="loadingRing_RJI3 searchBarLoadingRing_YnHq"><div></div><div></div><div></div><div></div></div></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_xLCN"><div class="docItemContainer_jfFK"><article><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><div class="row"><div class="col col--12 markdown"><header><h1>inline::unstructured</h1></header>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="description">Description<a href="#description" class="hash-link" aria-label="Direct link to Description" title="Direct link to Description" translate="no">​</a></h2>
+<p><a href="https://github.com/Unstructured-IO/unstructured" target="_blank" rel="noopener noreferrer" class="">Unstructured</a> is a comprehensive document
+processing library supporting 65+ file formats including PDF, Office documents (DOCX, PPTX, XLSX),
+email formats (EML, MSG), legacy formats (DOC, XLS), HTML, Markdown, and audio transcription.</p>
+<p>This provider uses the local Unstructured library for offline document processing. For cloud-based
+processing with better table extraction, use <code>remote::unstructured-api</code> instead.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="features">Features<a href="#features" class="hash-link" aria-label="Direct link to Features" title="Direct link to Features" translate="no">​</a></h2>
+<ul>
+<li class="">65+ format support - broadest format coverage of any OGX file processor</li>
+<li class="">Email processing - EML and MSG email formats (unique to Unstructured)</li>
+<li class="">Legacy formats - DOC, XLS, and other legacy Office formats</li>
+<li class="">Audio transcription - MP3, WAV, M4A via Whisper</li>
+<li class="">Local processing - no network required, cost-effective for high volume</li>
+<li class="">Structure-aware chunking - preserves document sections and headings</li>
+</ul>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="limitations">Limitations<a href="#limitations" class="hash-link" aria-label="Direct link to Limitations" title="Direct link to Limitations" translate="no">​</a></h2>
+<p>WARNING: Table detection is unreliable in local mode (GitHub issue <a href="https://github.com/Unstructured-IO/unstructured/issues/2997" target="_blank" rel="noopener noreferrer" class="">#2997</a>).
+For production table extraction, use <code>remote::unstructured-api</code> instead.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="system-requirements">System Requirements<a href="#system-requirements" class="hash-link" aria-label="Direct link to System Requirements" title="Direct link to System Requirements" translate="no">​</a></h2>
+<p>Required system dependencies:</p>
+<ul>
+<li class=""><code>libmagic-dev</code> - file type detection</li>
+<li class=""><code>poppler-utils</code> - PDF processing</li>
+<li class=""><code>tesseract-ocr</code> - OCR support</li>
+</ul>
+<p>Optional (for Office documents):</p>
+<ul>
+<li class=""><code>libreoffice</code> - Office document conversion (~800 MB)</li>
+</ul>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="macos">macOS<a href="#macos" class="hash-link" aria-label="Direct link to macOS" title="Direct link to macOS" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-background-color:hsl(220, 13%, 18%);--prism-color:hsl(220, 14%, 71%)"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="background-color:hsl(220, 13%, 18%);color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">brew </span><span class="token function" style="color:hsl(207, 82%, 66%)">install</span><span class="token plain"> libmagic poppler tesseract</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain"></span><span class="token comment" style="color:hsl(220, 10%, 40%)"># Optional: brew install libreoffice</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="ubuntudebian">Ubuntu/Debian<a href="#ubuntudebian" class="hash-link" aria-label="Direct link to Ubuntu/Debian" title="Direct link to Ubuntu/Debian" translate="no">​</a></h3>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-background-color:hsl(220, 13%, 18%);--prism-color:hsl(220, 14%, 71%)"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="background-color:hsl(220, 13%, 18%);color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token function" style="color:hsl(207, 82%, 66%)">sudo</span><span class="token plain"> </span><span class="token function" style="color:hsl(207, 82%, 66%)">apt-get</span><span class="token plain"> update </span><span class="token operator" style="color:hsl(207, 82%, 66%)">&amp;&amp;</span><span class="token plain"> </span><span class="token function" style="color:hsl(207, 82%, 66%)">sudo</span><span class="token plain"> </span><span class="token function" style="color:hsl(207, 82%, 66%)">apt-get</span><span class="token plain"> </span><span class="token function" style="color:hsl(207, 82%, 66%)">install</span><span class="token plain"> </span><span class="token parameter variable" style="color:hsl(207, 82%, 66%)">-y</span><span class="token plain"> </span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">    libmagic-dev </span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">    poppler-utils </span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">    tesseract-ocr</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain"></span><span class="token comment" style="color:hsl(220, 10%, 40%)"># Optional: sudo apt-get install -y libreoffice</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="docker-recommended">Docker (Recommended)<a href="#docker-recommended" class="hash-link" aria-label="Direct link to Docker (Recommended)" title="Direct link to Docker (Recommended)" translate="no">​</a></h3>
+<div class="language-dockerfile codeBlockContainer_Ckt0 theme-code-block" style="--prism-background-color:hsl(220, 13%, 18%);--prism-color:hsl(220, 14%, 71%)"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-dockerfile codeBlock_bY9V thin-scrollbar" style="background-color:hsl(220, 13%, 18%);color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">FROM python:3.12-slim</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">RUN apt-get update &amp;&amp; apt-get install -y \</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">    libmagic-dev \</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">    poppler-utils \</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">    tesseract-ocr \</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">    &amp;&amp; rm -rf /var/lib/apt/lists/*</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">RUN pip install ogx[unstructured-local]</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="installation">Installation<a href="#installation" class="hash-link" aria-label="Direct link to Installation" title="Direct link to Installation" translate="no">​</a></h2>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-background-color:hsl(220, 13%, 18%);--prism-color:hsl(220, 14%, 71%)"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="background-color:hsl(220, 13%, 18%);color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">pip </span><span class="token function" style="color:hsl(207, 82%, 66%)">install</span><span class="token plain"> </span><span class="token string" style="color:hsl(95, 38%, 62%)">&quot;ogx[unstructured-local]&quot;</span><br></span></code></pre></div></div>
+<p>Then install system dependencies as shown above.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="usage">Usage<a href="#usage" class="hash-link" aria-label="Direct link to Usage" title="Direct link to Usage" translate="no">​</a></h2>
+<p>Start OGX with the Unstructured file processor:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-background-color:hsl(220, 13%, 18%);--prism-color:hsl(220, 14%, 71%)"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="background-color:hsl(220, 13%, 18%);color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">ogx stack run </span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">  </span><span class="token parameter variable" style="color:hsl(207, 82%, 66%)">--providers</span><span class="token plain"> </span><span class="token string" style="color:hsl(95, 38%, 62%)">&quot;file_processors=inline::unstructured&quot;</span><span class="token plain"> </span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">  </span><span class="token parameter variable" style="color:hsl(207, 82%, 66%)">--port</span><span class="token plain"> </span><span class="token number" style="color:hsl(29, 54%, 61%)">8321</span><br></span></code></pre></div></div>
+<p>Or add it to a custom <code>run.yaml</code>:</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-background-color:hsl(220, 13%, 18%);--prism-color:hsl(220, 14%, 71%)"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="background-color:hsl(220, 13%, 18%);color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token key atrule" style="color:hsl(29, 54%, 61%)">file_processors</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">  </span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">-</span><span class="token plain"> </span><span class="token key atrule" style="color:hsl(29, 54%, 61%)">provider_id</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"> unstructured</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">    </span><span class="token key atrule" style="color:hsl(29, 54%, 61%)">provider_type</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"> inline</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain">unstructured</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">    </span><span class="token key atrule" style="color:hsl(29, 54%, 61%)">config</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">      </span><span class="token key atrule" style="color:hsl(29, 54%, 61%)">strategy</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"> auto  </span><span class="token comment" style="color:hsl(220, 10%, 40%)"># or &#x27;fast&#x27;, &#x27;hi_res&#x27;, &#x27;ocr_only&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain">      </span><span class="token key atrule" style="color:hsl(29, 54%, 61%)">skip_infer_table_types</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"> </span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">[</span><span class="token string" style="color:hsl(95, 38%, 62%)">&quot;pdf&quot;</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">]</span><span class="token plain">  </span><span class="token comment" style="color:hsl(220, 10%, 40%)"># Workaround for table issues</span><br></span></code></pre></div></div>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="when-to-use">When to Use<a href="#when-to-use" class="hash-link" aria-label="Direct link to When to Use" title="Direct link to When to Use" translate="no">​</a></h2>
+<p><strong>Use <code>inline::unstructured</code> when:</strong></p>
+<ul>
+<li class="">You need email format support (EML, MSG)</li>
+<li class="">You need legacy Office formats (DOC, XLS)</li>
+<li class="">You need audio transcription</li>
+<li class="">You need offline/local processing</li>
+<li class="">You need the broadest format coverage</li>
+</ul>
+<p><strong>Use <code>inline::docling</code> when:</strong></p>
+<ul>
+<li class="">You need precise token-based chunking</li>
+<li class="">You need best-in-class table extraction</li>
+<li class="">You primarily process PDF/DOCX/PPTX</li>
+</ul>
+<p><strong>Use <code>remote::unstructured-api</code> when:</strong></p>
+<ul>
+<li class="">You need reliable table extraction</li>
+<li class="">You have network connectivity and API key</li>
+<li class="">You want to avoid system dependencies</li>
+</ul>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="documentation">Documentation<a href="#documentation" class="hash-link" aria-label="Direct link to Documentation" title="Direct link to Documentation" translate="no">​</a></h2>
+<p>See <a href="https://docs.unstructured.io/" target="_blank" rel="noopener noreferrer" class="">Unstructured&#x27;s documentation</a> for more details.</p>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="configuration">Configuration<a href="#configuration" class="hash-link" aria-label="Direct link to Configuration" title="Direct link to Configuration" translate="no">​</a></h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>strategy</code></td><td><code>Literal[auto, fast, hi_res, ocr_only]</code></td><td>No</td><td>auto</td><td>Partitioning strategy for document processing. &#x27;auto&#x27; (default) intelligently selects the best approach based on document type. &#x27;fast&#x27; uses text extraction without layout analysis (fastest). &#x27;hi_res&#x27; uses layout models for better structure detection (slowest). &#x27;ocr_only&#x27; uses Tesseract OCR for scanned documents. WARNING: Table detection is unreliable in local mode due to known issue (<a href="https://github.com/Unstructured-IO/unstructured/issues/2997" target="_blank" rel="noopener noreferrer" class="">https://github.com/Unstructured-IO/unstructured/issues/2997</a>). Use remote::unstructured-api for production table extraction.</td></tr><tr><td><code>default_chunk_size_tokens</code></td><td><code>int</code></td><td>No</td><td>800</td><td>Default chunk size in tokens when chunking_strategy type is &#x27;auto&#x27;</td></tr><tr><td><code>default_chunk_overlap_tokens</code></td><td><code>int</code></td><td>No</td><td>400</td><td>Default chunk overlap in tokens when chunking_strategy type is &#x27;auto&#x27;</td></tr><tr><td><code>include_page_breaks</code></td><td><code>bool</code></td><td>No</td><td>True</td><td>Include PageBreak elements in output for supported formats (PDF, PPTX, HTML)</td></tr><tr><td><code>skip_infer_table_types</code></td><td><code>list[str]</code></td><td>No</td><td>[&#x27;pdf&#x27;]</td><td>File types to skip table inference for (workaround for local table detection issues). Example: [&#x27;pdf&#x27;, &#x27;docx&#x27;]. Set to empty list [] to attempt table detection for all formats. Note: Table detection is unreliable in local mode; use remote::unstructured-api for reliable tables.</td></tr><tr><td><code>extract_images_in_pdf</code></td><td><code>bool</code></td><td>No</td><td>False</td><td>Extract images from PDFs. Requires strategy=&#x27;hi_res&#x27;. May fail on some systems due to missing dependencies. Set to True only if you need image extraction and have verified it works in your environment.</td></tr><tr><td><code>languages</code></td><td><code>list[str]</code></td><td>No</td><td>[&#x27;eng&#x27;]</td><td>OCR language codes for Tesseract (e.g., [&#x27;eng&#x27;, &#x27;spa&#x27;, &#x27;deu&#x27;]). Additional language packs must be installed separately via tesseract-ocr-{lang}.</td></tr></tbody></table>
+<h2 class="anchor anchorTargetHideOnScrollNavbar_vjPI" id="sample-configuration">Sample Configuration<a href="#sample-configuration" class="hash-link" aria-label="Direct link to Sample Configuration" title="Direct link to Sample Configuration" translate="no">​</a></h2>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-background-color:hsl(220, 13%, 18%);--prism-color:hsl(220, 14%, 71%)"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="background-color:hsl(220, 13%, 18%);color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token key atrule" style="color:hsl(29, 54%, 61%)">strategy</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"> auto</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain"></span><span class="token key atrule" style="color:hsl(29, 54%, 61%)">default_chunk_size_tokens</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"> </span><span class="token number" style="color:hsl(29, 54%, 61%)">800</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain"></span><span class="token key atrule" style="color:hsl(29, 54%, 61%)">default_chunk_overlap_tokens</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"> </span><span class="token number" style="color:hsl(29, 54%, 61%)">400</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain"></span><span class="token key atrule" style="color:hsl(29, 54%, 61%)">skip_infer_table_types</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain"></span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">-</span><span class="token plain"> pdf</span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain"></span><span class="token key atrule" style="color:hsl(29, 54%, 61%)">languages</span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:hsl(220, 14%, 71%);text-shadow:0 1px rgba(0, 0, 0, 0.3)"><span class="token plain"></span><span class="token punctuation" style="color:hsl(220, 14%, 71%)">-</span><span class="token plain"> eng</span><br></span></code></pre></div></div></div></div></div><div class="row"><div class="col col--12"><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/ogx-ai/ogx/edit/main/docs/docs/providers/file_processors/inline_unstructured.mdx" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Last updated<!-- --> on <b><time datetime="2026-06-26T17:47:03.000Z" itemprop="dateModified">Jun 26, 2026</time></b></span></div></div></footer></div></div></article><div class="row"><div class="col col--12"><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#description" class="table-of-contents__link toc-highlight">Description</a></li><li><a href="#features" class="table-of-contents__link toc-highlight">Features</a></li><li><a href="#limitations" class="table-of-contents__link toc-highlight">Limitations</a></li><li><a href="#system-requirements" class="table-of-contents__link toc-highlight">System Requirements</a><ul><li><a href="#macos" class="table-of-contents__link toc-highlight">macOS</a></li><li><a href="#ubuntudebian" class="table-of-contents__link toc-highlight">Ubuntu/Debian</a></li><li><a href="#docker-recommended" class="table-of-contents__link toc-highlight">Docker (Recommended)</a></li></ul></li><li><a href="#installation" class="table-of-contents__link toc-highlight">Installation</a></li><li><a href="#usage" class="table-of-contents__link toc-highlight">Usage</a></li><li><a href="#when-to-use" class="table-of-contents__link toc-highlight">When to Use</a></li><li><a href="#documentation" class="table-of-contents__link toc-highlight">Documentation</a></li><li><a href="#configuration" class="table-of-contents__link toc-highlight">Configuration</a></li><li><a href="#sample-configuration" class="table-of-contents__link toc-highlight">Sample Configuration</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Getting Started</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/v1.2.1/docs/getting_started/quickstart">Quickstart</a></li><li class="footer__item"><a class="footer__link-item" href="/v1.2.1/docs/concepts">Concepts</a></li><li class="footer__item"><a class="footer__link-item" href="/v1.2.1/docs/distributions/building_distro">Distributions</a></li><li class="footer__item"><a class="footer__link-item" href="/v1.2.1/docs/providers">Providers</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">API</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/v1.2.1/docs/api-overview">API Reference</a></li><li class="footer__item"><a class="footer__link-item" href="/v1.2.1/docs/api-openai">OpenAI</a></li><li class="footer__item"><a class="footer__link-item" href="/v1.2.1/docs/api-anthropic-messages">Anthropic Messages</a></li><li class="footer__item"><a class="footer__link-item" href="/v1.2.1/docs/api-google-interactions">Google Interactions</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://discord.gg/bUYRqEvK6" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://github.com/ogx-ai/ogx/issues" target="_blank" rel="noopener noreferrer" class="footer__link-item">Issues<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a class="footer__link-item" href="/v1.2.1/docs/contributing">Contributing</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Resources</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/v1.2.1/brand">Brand</a></li><li class="footer__item"><a href="https://github.com/ogx-ai/ogx" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://pypi.org/project/ogx/" target="_blank" rel="noopener noreferrer" class="footer__link-item">PyPI<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://github.com/ogx-ai/ogx/releases" target="_blank" rel="noopener noreferrer" class="footer__link-item">Releases<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://hub.docker.com/u/llamastack" target="_blank" rel="noopener noreferrer" class="footer__link-item">Docker Hub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 The OGX Contributors</div></div></div></footer></div>
+</body>
+</html>
