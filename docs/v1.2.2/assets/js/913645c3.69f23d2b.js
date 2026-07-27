@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkdocusaurus_template_openapi_docs=globalThis.webpackChunkdocusaurus_template_openapi_docs||[]).push([[2373],{67285(e){e.exports=JSON.parse('{"tags":[{"label":"getting-started","permalink":"/v1.2.2/docs/tags/getting-started","count":1},{"label":"overview","permalink":"/v1.2.2/docs/tags/overview","count":1}]}')}}]);
