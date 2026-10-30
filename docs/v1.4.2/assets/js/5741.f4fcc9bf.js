@@ -1,0 +1,1 @@
+(globalThis.webpackChunkdocusaurus_template_openapi_docs=globalThis.webpackChunkdocusaurus_template_openapi_docs||[]).push([[5741],{45741(){}}]);
