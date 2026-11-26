@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkdocusaurus_template_openapi_docs=globalThis.webpackChunkdocusaurus_template_openapi_docs||[]).push([[2580],{2580(e,a,s){s.d(a,{createWardleyServices:()=>u.J});var u=s(40120);s(80184)}}]);
