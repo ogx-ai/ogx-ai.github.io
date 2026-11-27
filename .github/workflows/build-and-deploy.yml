@@ -24,6 +24,11 @@ on:
         required: false
         default: 'main'
         type: string
+      ogx_ref:
+        description: 'Branch or tag of ogx to build the versioned docs from (default: the version tag). Set to a release branch to rebuild a released version of the docs as it evolves.'
+        required: false
+        default: ''
+        type: string
 
 concurrency:
   group: docs-build-deploy
@@ -69,8 +74,16 @@ jobs:
           echo "building_latest=true" >> $GITHUB_OUTPUT
           echo "VERSION_TAG=latest" >> $GITHUB_ENV
         else
-          git checkout "$VERSION"
-          echo "Using tag: $VERSION"
+          REF="${{ github.event.client_payload.ref || github.event.inputs.ogx_ref || '' }}"
+          if [ -n "$REF" ]; then
+            git checkout "$REF"
+            echo "Using ref: $REF (docs for version $VERSION)"
+            echo "OGX_REF=$REF" >> $GITHUB_ENV
+          else
+            git checkout "$VERSION"
+            echo "Using tag: $VERSION"
+            echo "OGX_REF=" >> $GITHUB_ENV
+          fi
           echo "BUILDING_LATEST=false" >> $GITHUB_ENV
           echo "building_latest=false" >> $GITHUB_OUTPUT
           echo "VERSION_TAG=$VERSION" >> $GITHUB_ENV
@@ -259,7 +272,11 @@ jobs:
     - name: Build archived version
       if: env.BUILDING_LATEST != 'true'
       run: |
-        ./build-archived-version.sh "${{ env.VERSION_TAG }}" --ogx-dir "${{ env.TEMP_DIR }}/ogx"
+        REF_ARGS=""
+        if [ -n "${{ env.OGX_REF }}" ]; then
+          REF_ARGS="--ref ${{ env.OGX_REF }}"
+        fi
+        ./build-archived-version.sh "${{ env.VERSION_TAG }}" $REF_ARGS --ogx-dir "${{ env.TEMP_DIR }}/ogx"
 
     - name: Update versionsArchived.json
       if: env.BUILDING_LATEST != 'true'

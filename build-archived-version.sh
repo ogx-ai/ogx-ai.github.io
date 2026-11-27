@@ -3,43 +3,54 @@ set -euo pipefail
 
 # build-archived-version.sh - Build a standalone static Docusaurus site for an archived version
 #
-# Usage: ./build-archived-version.sh <version-tag> [--ogx-dir <path>]
+# Usage: ./build-archived-version.sh <version-tag> [--ogx-dir <path>] [--ref <git-ref>]
 #
 # Examples:
 #   ./build-archived-version.sh v0.5.0
 #   ./build-archived-version.sh v0.6.0 --ogx-dir /tmp/ogx
+#   # Rebuild the v2.0.0 docs from the living release branch (docs for a
+#   # released version evolve without a new tag):
+#   ./build-archived-version.sh v2.0.0 --ref release-2.0.x
+#
+# --ref checks out the given branch or tag instead of <version-tag>, which is
+# still used for the output directory name and the site's version labels.
 #
 # Output: docs/<version-tag>/ containing the full static site
 
-VERSION="${1:?Usage: $0 <version-tag> [--ogx-dir <path>]}"
+VERSION="${1:?Usage: $0 <version-tag> [--ogx-dir <path>] [--ref <git-ref>]}"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Parse optional arguments
 OGX_DIR=""
+REF=""
 shift
 while [[ $# -gt 0 ]]; do
   case $1 in
     --ogx-dir) OGX_DIR="$2"; shift 2 ;;
+    --ref) REF="$2"; shift 2 ;;
     *) echo "Unknown option: $1"; exit 1 ;;
   esac
 done
+
+CHECKOUT_REF="${REF:-$VERSION}"
 
 # Setup temp directory for the build
 TEMP_DIR=$(mktemp -d)
 BUILD_DIR="$TEMP_DIR/ogx/docs"
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
-echo "=== Building archived version $VERSION ==="
+echo "=== Building archived version $VERSION (from $CHECKOUT_REF) ==="
 
-# Step 1: Get ogx at the specified version
+# Step 1: Get ogx at the specified version (or --ref, so a released version's
+# docs can be rebuilt from its living release branch)
 if [ -n "$OGX_DIR" ] && [ -d "$OGX_DIR" ]; then
   echo "--- Cloning from local repo ---"
   git clone --local --no-checkout "$OGX_DIR" "$TEMP_DIR/ogx"
   cd "$TEMP_DIR/ogx"
-  git checkout "$VERSION" 2>/dev/null || git checkout "tags/$VERSION"
+  git checkout "$CHECKOUT_REF" 2>/dev/null || git checkout "tags/$CHECKOUT_REF"
 else
   echo "--- Cloning from GitHub ---"
-  git clone --depth 1 --branch "$VERSION" https://github.com/ogx-ai/ogx.git "$TEMP_DIR/ogx"
+  git clone --depth 1 --branch "$CHECKOUT_REF" https://github.com/ogx-ai/ogx.git "$TEMP_DIR/ogx"
 fi
 
 cd "$BUILD_DIR"
