@@ -72,6 +72,13 @@ def inline_raw_loader(versioned_dir, repo_root):
             continue
 
         for var_name, file_ref in imports:
+            # Imports whose value is passed to a component (e.g. the quickstart
+            # selector's files prop) are resolved by webpack's raw-loader at
+            # build time; this script only inlines <ReactMarkdown> usages, so
+            # leave everything else untouched.
+            if f"<ReactMarkdown>{{{var_name}}}</ReactMarkdown>" not in content:
+                continue
+
             # Build candidate paths to resolve the referenced file
             candidates = []
             if "../" in file_ref:
